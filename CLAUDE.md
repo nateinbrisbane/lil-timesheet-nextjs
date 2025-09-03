@@ -199,6 +199,8 @@ src/
 - **Invoice Templates**: Client-specific templates with custom rates and optional overrides
 - **Template Flexibility**: Global settings can be overridden per template for different clients
 - **Database-Driven**: All invoice data retrieved from database, no hardcoded values
+- **Auto Invoice Numbers**: Unique YYMMDDXX format with current date + random 2-digit suffix
+- **Professional Output**: Clean print view with navigation hidden for PDF generation
 - **Privacy-First**: No personal information stored in code or placeholders
 
 ### UI/UX Highlights
@@ -235,6 +237,26 @@ src/
 - **Responsive Forms**: Full-width inputs on mobile, adaptive modal behavior
 - **Mobile-First Typography**: Scaling text sizes and spacing for optimal readability
 - **Flexible Button Layouts**: Stack vertically on mobile, arrange horizontally on desktop
+
+## Invoice Number Generation
+
+The application automatically generates unique invoice numbers using a date-based format:
+
+### **Format: `YYMMDDXX`**
+- **YY**: Last 2 digits of current year (e.g., "25" for 2025)
+- **MM**: Current month with leading zero (e.g., "01" for January)  
+- **DD**: Current day with leading zero (e.g., "15" for the 15th)
+- **XX**: Random 2-digit number from 00-99 for uniqueness
+
+### **Examples:**
+- Generated on January 15, 2025: `25011543`
+- Generated on December 3, 2025: `25120317`
+
+### **Generation Logic:**
+- Automatically generated when invoice page loads
+- Based on current date (not timesheet week date)
+- New random suffix ensures uniqueness on page refresh
+- Chronological organization for easy reference and sorting
 
 ## Support
 For issues or feature requests, contact the development team or create issues in the GitHub repository.
