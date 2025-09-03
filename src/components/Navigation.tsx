@@ -61,9 +61,6 @@ export default function Navigation() {
               <span className="text-sm font-medium text-gray-900 leading-tight group-hover:text-blue-700 transition-colors">
                 {session.user?.name || 'User'}
               </span>
-              <span className="text-xs text-gray-500 leading-tight group-hover:text-blue-600 transition-colors">
-                Settings & Account
-              </span>
             </div>
             <div className="text-gray-400 group-hover:text-blue-500 transition-colors">
               <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
