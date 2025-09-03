@@ -243,22 +243,11 @@ function InvoicePageContent() {
     window.print();
   };
 
-  const handleBack = () => {
-    router.push('/');
-  };
-
   return (
     <div className="min-h-screen bg-white">
-      {/* Print/Back buttons - hidden when printing */}
-      <div className="print:hidden p-3 sm:p-4 bg-gray-50 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-0">
-        <button
-          onClick={handleBack}
-          className="px-3 sm:px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors text-sm sm:text-base"
-        >
-          ← Back to Timesheet
-        </button>
-        
-        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4 w-full sm:w-auto">
+      {/* Print button - hidden when printing */}
+      <div className="print:hidden p-3 sm:p-4 bg-gray-50 flex justify-center sm:justify-end">
+        <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-4">
           {invoiceTemplates.length > 1 && (
             <select
               value={selectedTemplate?.id || ''}
@@ -374,6 +363,18 @@ function InvoicePageContent() {
           
           .print\\:block {
             display: block !important;
+          }
+          
+          /* Hide navigation and page wrapper during print */
+          nav,
+          .bg-gray-50 {
+            display: none !important;
+          }
+          
+          /* Ensure invoice content takes full width when printing */
+          .min-h-screen {
+            margin: 0 !important;
+            padding: 0 !important;
           }
         }
       `}</style>

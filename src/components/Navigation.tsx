@@ -12,7 +12,7 @@ export default function Navigation() {
   if (!session) return null;
 
   return (
-    <div className="bg-white rounded-lg shadow-sm mb-3">
+    <nav className="bg-white rounded-lg shadow-sm mb-3 print:hidden">
       <div className="flex justify-between items-center p-2 sm:p-3 border-b border-gray-100">
         <div className="flex items-center gap-3 sm:gap-6">
           <button
@@ -85,6 +85,6 @@ export default function Navigation() {
           </button>
         </div>
       </div>
-    </div>
+    </nav>
   );
 }
