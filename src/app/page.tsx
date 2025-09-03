@@ -196,6 +196,17 @@ export default function Home() {
     setCurrentWeek(newWeek)
   }
 
+  const jumpToWeek = (weeksOffset: number) => {
+    const newWeek = addWeeks(startOfWeek(new Date(), { weekStartsOn: 1 }), weeksOffset)
+    setCurrentWeek(newWeek)
+  }
+
+  const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedDate = new Date(event.target.value)
+    const weekStart = startOfWeek(selectedDate, { weekStartsOn: 1 })
+    setCurrentWeek(weekStart)
+  }
+
   const hasWorkingHours = useCallback(() => {
     return Object.values(weekData.data).some(day => {
       return day.start && day.finish && day.start !== '' && day.finish !== ''
@@ -258,13 +269,14 @@ export default function Home() {
         </div>
 
         {/* Week Navigation */}
-        <div className="bg-white rounded-lg shadow-sm p-2 mb-3">
-          <div className="flex justify-between items-center">
+        <div className="bg-white rounded-lg shadow-sm p-3 mb-3">
+          {/* Main Navigation */}
+          <div className="flex justify-between items-center mb-3">
             <button
               onClick={() => navigateWeek('prev')}
               className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 hover:shadow-lg transition-all duration-200 ease-in-out transform hover:scale-105 active:scale-95"
             >
-              ← Previous Week
+              ← Previous
             </button>
             <div className="text-lg font-semibold text-gray-700">
               {format(currentWeek, 'dd/MM/yyyy')} - {format(addDays(currentWeek, 6), 'dd/MM/yyyy')}
@@ -273,8 +285,61 @@ export default function Home() {
               onClick={() => navigateWeek('next')}
               className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 hover:shadow-lg transition-all duration-200 ease-in-out transform hover:scale-105 active:scale-95"
             >
-              Next Week →
+              Next →
             </button>
+          </div>
+          
+          {/* Quick Navigation */}
+          <div className="border-t pt-3">
+            <div className="flex flex-wrap justify-center gap-2 mb-3">
+              <button
+                onClick={() => jumpToWeek(-4)}
+                className="px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded hover:bg-gray-200 transition-colors"
+              >
+                4 weeks ago
+              </button>
+              <button
+                onClick={() => jumpToWeek(-2)}
+                className="px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded hover:bg-gray-200 transition-colors"
+              >
+                2 weeks ago
+              </button>
+              <button
+                onClick={() => jumpToWeek(-1)}
+                className="px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded hover:bg-gray-200 transition-colors"
+              >
+                Last week
+              </button>
+              <button
+                onClick={() => jumpToWeek(0)}
+                className="px-3 py-1 text-sm bg-green-100 text-green-700 rounded hover:bg-green-200 transition-colors font-medium"
+              >
+                This week
+              </button>
+              <button
+                onClick={() => jumpToWeek(1)}
+                className="px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded hover:bg-gray-200 transition-colors"
+              >
+                Next week
+              </button>
+              <button
+                onClick={() => jumpToWeek(2)}
+                className="px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded hover:bg-gray-200 transition-colors"
+              >
+                2 weeks ahead
+              </button>
+            </div>
+            
+            {/* Date Picker */}
+            <div className="flex justify-center items-center gap-3">
+              <label className="text-sm text-gray-600">Jump to specific week:</label>
+              <input
+                type="date"
+                onChange={handleDateChange}
+                value={format(currentWeek, 'yyyy-MM-dd')}
+                className="px-3 py-1 text-sm border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+            </div>
           </div>
         </div>
 
