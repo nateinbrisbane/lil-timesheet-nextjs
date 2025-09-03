@@ -5,26 +5,19 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import { useState, useEffect, Suspense } from 'react';
 import { format, startOfWeek, addDays } from 'date-fns';
 
-interface DayEntry {
-  id: string;
+interface DayData {
   date: string;
-  startTime: string | null;
-  breakHours: number | null;
-  breakMinutes: number | null;
-  finishTime: string | null;
+  start: string | null;
+  breakHours: string;
+  breakMinutes: string;
+  finish: string | null;
+  total: string;
 }
 
 interface TimesheetData {
   weekStart: string;
   weeklyTotal: string;
-  data: Record<string, {
-    date: string;
-    start: string | null;
-    breakHours: string;
-    breakMinutes: string;
-    finish: string | null;
-    total: string;
-  }>;
+  data: Record<string, DayData>;
 }
 
 interface GlobalInvoiceSettings {
@@ -120,6 +113,23 @@ function InvoicePageContent() {
         if (result.success) {
           setTimesheetData(result.data);
         }
+      } else if (response.status === 404) {
+        // Timesheet doesn't exist for this week - create empty data
+        setTimesheetData({
+          weekStart: weekStart || '',
+          weeklyTotal: '0:00',
+          data: {
+            mon: { date: '', start: null, breakHours: '0', breakMinutes: '0', finish: null, total: '0:00' },
+            tue: { date: '', start: null, breakHours: '0', breakMinutes: '0', finish: null, total: '0:00' },
+            wed: { date: '', start: null, breakHours: '0', breakMinutes: '0', finish: null, total: '0:00' },
+            thu: { date: '', start: null, breakHours: '0', breakMinutes: '0', finish: null, total: '0:00' },
+            fri: { date: '', start: null, breakHours: '0', breakMinutes: '0', finish: null, total: '0:00' },
+            sat: { date: '', start: null, breakHours: '0', breakMinutes: '0', finish: null, total: '0:00' },
+            sun: { date: '', start: null, breakHours: '0', breakMinutes: '0', finish: null, total: '0:00' }
+          }
+        });
+      } else {
+        console.error('Failed to fetch timesheet:', response.status, response.statusText);
       }
     } catch (error) {
       console.error('Error fetching timesheet:', error);
@@ -128,12 +138,7 @@ function InvoicePageContent() {
     }
   };
 
-  const calculateHours = (dayData: {
-    start: string | null;
-    finish: string | null;
-    breakHours: string;
-    breakMinutes: string;
-  }): number => {
+  const calculateHours = (dayData: DayData): number => {
     if (!dayData.start || !dayData.finish) return 0;
 
     const [startHour, startMin] = dayData.start.split(':').map(Number);
