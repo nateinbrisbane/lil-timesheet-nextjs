@@ -181,12 +181,12 @@ export default function Home() {
   if (!session) return null
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4">
+    <div className="min-h-screen bg-gray-50 p-3">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="bg-white rounded-lg shadow-sm mb-4">
+        <div className="bg-white rounded-lg shadow-sm mb-3">
           {/* Top Navigation Bar */}
-          <div className="flex justify-between items-center p-4 border-b border-gray-100">
+          <div className="flex justify-between items-center p-3 border-b border-gray-100">
             <div className="flex items-center gap-6">
               <h1 className="text-2xl font-bold text-gray-800 cursor-default">Lil Timesheet</h1>
               {session.user?.role === 'ADMIN' && (
@@ -237,13 +237,13 @@ export default function Home() {
           </div>
           
           {/* Week Info */}
-          <div className="px-4 py-2">
-            <p className="text-gray-600">Week starting {format(currentWeek, 'dd/MM/yyyy')}</p>
+          <div className="px-3 py-1">
+            <p className="text-gray-600 text-sm">Week starting {format(currentWeek, 'dd/MM/yyyy')}</p>
           </div>
         </div>
 
         {/* Week Navigation */}
-        <div className="bg-white rounded-lg shadow-sm p-3 mb-4">
+        <div className="bg-white rounded-lg shadow-sm p-2 mb-3">
           <div className="flex justify-between items-center">
             <button
               onClick={() => navigateWeek('prev')}
@@ -269,67 +269,67 @@ export default function Home() {
             <table className="w-full border-collapse">
               <thead className="bg-gray-100 border-b-2 border-gray-200">
                 <tr>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-800 border-r border-gray-200">Day</th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-800 border-r border-gray-200">Date</th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-800 border-r border-gray-200">Start Time</th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-800 border-r border-gray-200">Break</th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-800 border-r border-gray-200">Finish Time</th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-800">Total Hours</th>
+                  <th className="px-4 py-2 text-left text-sm font-semibold text-gray-800 border-r border-gray-200">Day</th>
+                  <th className="px-4 py-2 text-left text-sm font-semibold text-gray-800 border-r border-gray-200">Date</th>
+                  <th className="px-4 py-2 text-left text-sm font-semibold text-gray-800 border-r border-gray-200">Start Time</th>
+                  <th className="px-4 py-2 text-left text-sm font-semibold text-gray-800 border-r border-gray-200">Break</th>
+                  <th className="px-4 py-2 text-left text-sm font-semibold text-gray-800 border-r border-gray-200">Finish Time</th>
+                  <th className="px-4 py-2 text-left text-sm font-semibold text-gray-800">Total Hours</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
                 {dayNames.map((day, index) => (
                   <tr key={day} className={`${index >= 5 ? 'bg-blue-50' : 'bg-white'} hover:bg-gray-50 transition-colors`}>
-                    <td className="px-6 py-4 font-semibold text-gray-900 border-r border-gray-200 bg-gray-50">{dayLabels[index]}</td>
-                    <td className="px-6 py-4 text-gray-700 border-r border-gray-200 font-medium">{weekData.data[day]?.date}</td>
-                    <td className="px-6 py-4 border-r border-gray-200">
+                    <td className="px-4 py-2 font-semibold text-gray-900 border-r border-gray-200 bg-gray-50">{dayLabels[index]}</td>
+                    <td className="px-4 py-2 text-gray-700 border-r border-gray-200 font-medium">{weekData.data[day]?.date}</td>
+                    <td className="px-4 py-2 border-r border-gray-200">
                       <input
                         type="time"
                         value={weekData.data[day]?.start || ''}
                         onChange={(e) => handleInputChange(day, 'start', e.target.value)}
-                        className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                        className="w-full px-2 py-1 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors text-sm"
                       />
                     </td>
-                    <td className="px-6 py-4 border-r border-gray-200">
-                      <div className="flex gap-2 items-center">
+                    <td className="px-4 py-2 border-r border-gray-200">
+                      <div className="flex gap-1 items-center">
                         <input
                           type="number"
                           min="0"
                           max="23"
                           value={weekData.data[day]?.breakHours || ''}
                           onChange={(e) => handleInputChange(day, 'breakHours', e.target.value)}
-                          className="w-16 px-2 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-center transition-colors"
+                          className="w-14 px-1 py-1 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-center transition-colors text-sm"
                         />
-                        <span className="text-gray-600 font-medium">h</span>
+                        <span className="text-gray-600 font-medium text-xs">h</span>
                         <input
                           type="number"
                           min="0"
                           max="59"
                           value={weekData.data[day]?.breakMinutes || ''}
                           onChange={(e) => handleInputChange(day, 'breakMinutes', e.target.value)}
-                          className="w-16 px-2 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-center transition-colors"
+                          className="w-14 px-1 py-1 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-center transition-colors text-sm"
                         />
-                        <span className="text-gray-600 font-medium">m</span>
+                        <span className="text-gray-600 font-medium text-xs">m</span>
                       </div>
                     </td>
-                    <td className="px-6 py-4 border-r border-gray-200">
+                    <td className="px-4 py-2 border-r border-gray-200">
                       <input
                         type="time"
                         value={weekData.data[day]?.finish || ''}
                         onChange={(e) => handleInputChange(day, 'finish', e.target.value)}
-                        className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                        className="w-full px-2 py-1 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors text-sm"
                       />
                     </td>
-                    <td className="px-6 py-4 font-mono text-lg font-semibold text-blue-600">{weekData.data[day]?.total}</td>
+                    <td className="px-4 py-2 font-mono text-base font-semibold text-blue-600">{weekData.data[day]?.total}</td>
                   </tr>
                 ))}
               </tbody>
               <tfoot className="bg-gray-100 border-t-2 border-gray-200">
                 <tr>
-                  <td colSpan={5} className="px-6 py-4 text-right font-bold text-gray-900 border-r border-gray-200">
+                  <td colSpan={5} className="px-4 py-2 text-right font-bold text-gray-900 border-r border-gray-200">
                     Weekly Total:
                   </td>
-                  <td className="px-6 py-4 font-mono font-bold text-xl text-green-600">
+                  <td className="px-4 py-2 font-mono font-bold text-lg text-green-600">
                     {weekData.weeklyTotal}
                   </td>
                 </tr>
@@ -339,11 +339,11 @@ export default function Home() {
         </div>
 
         {/* Save Button */}
-        <div className="mt-4 flex justify-center">
+        <div className="mt-3 flex justify-center">
           <button
             onClick={saveTimesheet}
             disabled={loading}
-            className="px-8 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 hover:shadow-lg transition-all duration-200 ease-in-out transform hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:shadow-none"
+            className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 hover:shadow-lg transition-all duration-200 ease-in-out transform hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:shadow-none"
           >
             {loading ? 'Saving...' : 'Save Timesheet'}
           </button>
