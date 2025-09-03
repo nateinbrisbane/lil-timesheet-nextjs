@@ -52,6 +52,7 @@ function InvoicePageContent() {
   const router = useRouter();
   const [timesheetData, setTimesheetData] = useState<TimesheetData | null>(null);
   const [loading, setLoading] = useState(true);
+  const [invoiceDataLoading, setInvoiceDataLoading] = useState(true);
   const [invoiceNumber, setInvoiceNumber] = useState('');
   const [globalSettings, setGlobalSettings] = useState<GlobalInvoiceSettings | null>(null);
   const [invoiceTemplates, setInvoiceTemplates] = useState<InvoiceTemplate[]>([]);
@@ -105,6 +106,8 @@ function InvoicePageContent() {
       }
     } catch (error) {
       console.error('Error fetching invoice data:', error);
+    } finally {
+      setInvoiceDataLoading(false);
     }
   };
 
@@ -214,11 +217,11 @@ function InvoicePageContent() {
     return <div className="p-8">Please log in to view invoices.</div>;
   }
 
-  if (loading) {
+  if (loading || invoiceDataLoading) {
     return <div className="p-8">Loading invoice...</div>;
   }
 
-  console.log('Checking settings state:', { globalSettings: !!globalSettings, selectedTemplate: !!selectedTemplate, loading });
+  console.log('Checking settings state:', { globalSettings: !!globalSettings, selectedTemplate: !!selectedTemplate, loading, invoiceDataLoading });
   
   if (!globalSettings || !selectedTemplate) {
     return (
