@@ -39,3 +39,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# old Express.js files
+timesheet.db
+lil-timesheet-nextjs/
