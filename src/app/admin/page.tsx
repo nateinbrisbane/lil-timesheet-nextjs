@@ -108,30 +108,48 @@ export default function AdminDashboard() {
     <div className="min-h-screen bg-gray-50 p-4">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
-          <div className="flex justify-between items-center">
-            <div>
-              <h1 className="text-3xl font-bold text-gray-800">Admin Dashboard</h1>
-              <p className="text-gray-600 mt-1">User Management & System Overview</p>
+        <div className="bg-white rounded-lg shadow-sm mb-6">
+          {/* Top Navigation Bar */}
+          <div className="flex justify-between items-center p-4 border-b border-gray-100">
+            <div className="flex items-center gap-6">
+              <h1 className="text-2xl font-bold text-gray-800">Admin Dashboard</h1>
+              <nav className="flex items-center">
+                <button
+                  onClick={() => router.push('/')}
+                  className="text-sm font-medium text-blue-600 hover:text-blue-700 underline decoration-2 underline-offset-4 transition-colors"
+                >
+                  ← Back to Timesheet
+                </button>
+              </nav>
             </div>
-            <div className="flex items-center gap-4">
-              <button
-                onClick={() => router.push('/')}
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-              >
-                Back to Timesheet
-              </button>
-              <div className="flex items-center gap-2">
+            
+            {/* User Profile */}
+            <div className="flex items-center gap-3">
+              {session?.user?.image ? (
                 <Image
-                  src={session?.user?.image || '/default-avatar.svg'}
+                  src={session.user.image}
                   alt={session?.user?.name || 'User'}
-                  width={32}
-                  height={32}
-                  className="w-8 h-8 rounded-full"
+                  width={36}
+                  height={36}
+                  className="w-9 h-9 rounded-full border-2 border-gray-200"
                 />
-                <span className="text-gray-700">{session?.user?.name}</span>
+              ) : (
+                <div className="w-9 h-9 rounded-full bg-purple-100 flex items-center justify-center">
+                  <span className="text-purple-600 text-sm font-medium">
+                    {session?.user?.name?.charAt(0)?.toUpperCase() || 'A'}
+                  </span>
+                </div>
+              )}
+              <div className="flex flex-col">
+                <span className="text-sm font-medium text-gray-900">{session?.user?.name}</span>
+                <span className="text-xs text-purple-600 font-medium">Administrator</span>
               </div>
             </div>
+          </div>
+          
+          {/* Dashboard Info */}
+          <div className="p-4">
+            <p className="text-gray-600">User Management & System Overview</p>
           </div>
         </div>
 
