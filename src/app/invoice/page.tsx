@@ -2,7 +2,7 @@
 
 import { useSession } from 'next-auth/react';
 import { useSearchParams, useRouter } from 'next/navigation';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { format, startOfWeek, addDays } from 'date-fns';
 
 interface DayEntry {
@@ -46,7 +46,7 @@ interface InvoiceTemplate {
   isDefault: boolean;
 }
 
-export default function InvoicePage() {
+function InvoicePageContent() {
   const { data: session } = useSession();
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -336,5 +336,13 @@ export default function InvoicePage() {
         }
       `}</style>
     </div>
+  );
+}
+
+export default function InvoicePage() {
+  return (
+    <Suspense fallback={<div className="p-8">Loading invoice...</div>}>
+      <InvoicePageContent />
+    </Suspense>
   );
 }
