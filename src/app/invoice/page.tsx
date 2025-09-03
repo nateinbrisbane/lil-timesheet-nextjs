@@ -72,15 +72,25 @@ function InvoicePageContent() {
     try {
       // Fetch global settings
       const settingsResponse = await fetch('/api/invoice/settings');
+      console.log('Settings response status:', settingsResponse.status);
       if (settingsResponse.ok) {
         const settings = await settingsResponse.json();
-        setGlobalSettings(settings);
+        console.log('Settings data:', settings);
+        if (settings && settings.id) {
+          setGlobalSettings(settings);
+        } else {
+          console.log('No global settings found');
+        }
+      } else {
+        console.log('Settings fetch failed:', settingsResponse.status, settingsResponse.statusText);
       }
 
       // Fetch templates
       const templatesResponse = await fetch('/api/invoice/templates');
+      console.log('Templates response status:', templatesResponse.status);
       if (templatesResponse.ok) {
         const templates = await templatesResponse.json();
+        console.log('Templates data:', templates);
         setInvoiceTemplates(templates);
         
         // Select template based on URL param or default
@@ -90,6 +100,8 @@ function InvoicePageContent() {
         } else {
           setSelectedTemplate(templates.find((t: InvoiceTemplate) => t.isDefault) || templates[0]);
         }
+      } else {
+        console.log('Templates fetch failed:', templatesResponse.status, templatesResponse.statusText);
       }
     } catch (error) {
       console.error('Error fetching invoice data:', error);
