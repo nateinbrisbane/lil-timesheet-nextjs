@@ -34,16 +34,31 @@ model Session {
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
+enum UserRole {
+  USER
+  ADMIN
+}
+
+enum UserStatus {
+  ACTIVE
+  INACTIVE
+  PENDING
+}
+
 model User {
-  id            String    @id @default(cuid())
+  id            String     @id @default(cuid())
   name          String?
-  email         String    @unique
+  email         String     @unique
   emailVerified DateTime?
   image         String?
+  role          UserRole   @default(USER)
+  status        UserStatus @default(PENDING)
   accounts      Account[]
   sessions      Session[]
   timesheets    Timesheet[]
-  createdAt     DateTime  @default(now())
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt @default(now())
+  lastLoginAt   DateTime?
 }
 
 model VerificationToken {

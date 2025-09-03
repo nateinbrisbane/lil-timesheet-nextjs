@@ -109,8 +109,22 @@ export default function Home() {
       return
     }
     
+    // Check if user is inactive
+    if (session?.user?.status === 'INACTIVE') {
+      alert('Your account has been deactivated. Please contact an administrator.')
+      signOut({ callbackUrl: '/login' })
+      return
+    }
+    
+    // Check if user is pending approval
+    if (session?.user?.status === 'PENDING') {
+      alert('Your account is pending approval. Please contact an administrator.')
+      signOut({ callbackUrl: '/login' })
+      return
+    }
+    
     initializeWeek()
-  }, [status, router, initializeWeek])
+  }, [status, router, session, initializeWeek])
 
 
   const handleInputChange = (day: string, field: keyof DayData, value: string) => {
@@ -177,6 +191,14 @@ export default function Home() {
               <p className="text-gray-600 mt-1">Week starting {format(currentWeek, 'dd/MM/yyyy')}</p>
             </div>
             <div className="flex items-center gap-4">
+              {session.user?.role === 'ADMIN' && (
+                <button
+                  onClick={() => router.push('/admin')}
+                  className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
+                >
+                  Admin Panel
+                </button>
+              )}
               <div className="flex items-center gap-2">
                 <Image
                   src={session.user?.image || '/default-avatar.svg'}
@@ -185,7 +207,12 @@ export default function Home() {
                   height={32}
                   className="w-8 h-8 rounded-full"
                 />
-                <span className="text-gray-700">{session.user?.name}</span>
+                <div className="flex flex-col">
+                  <span className="text-gray-700">{session.user?.name}</span>
+                  {session.user?.role === 'ADMIN' && (
+                    <span className="text-xs text-purple-600 font-medium">Admin</span>
+                  )}
+                </div>
               </div>
               <button
                 onClick={() => signOut({ callbackUrl: '/login' })}

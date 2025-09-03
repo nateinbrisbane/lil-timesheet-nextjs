@@ -19,13 +19,24 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
     }
 
-    // Find user by email
+    // Find user by email and check status
     const user = await prisma.user.findUnique({
-      where: { email: session.user.email }
+      where: { email: session.user.email },
+      select: { 
+        id: true, 
+        email: true, 
+        status: true,
+        role: true 
+      }
     })
 
     if (!user) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 })
+    }
+
+    // Check if user is active
+    if (user.status !== 'ACTIVE') {
+      return NextResponse.json({ error: 'Account not active' }, { status: 403 })
     }
 
     // Create or update timesheet
@@ -99,13 +110,24 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'weekStart parameter required' }, { status: 400 })
     }
 
-    // Find user by email
+    // Find user by email and check status
     const user = await prisma.user.findUnique({
-      where: { email: session.user.email }
+      where: { email: session.user.email },
+      select: { 
+        id: true, 
+        email: true, 
+        status: true,
+        role: true 
+      }
     })
 
     if (!user) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 })
+    }
+
+    // Check if user is active
+    if (user.status !== 'ACTIVE') {
+      return NextResponse.json({ error: 'Account not active' }, { status: 403 })
     }
 
     // Get timesheet with day entries
