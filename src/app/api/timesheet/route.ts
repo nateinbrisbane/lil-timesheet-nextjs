@@ -126,7 +126,14 @@ export async function GET(request: NextRequest) {
     }
 
     // Format response
-    const data: any = {}
+    const data: Record<string, {
+      date: string
+      start: string | null
+      breakHours: string
+      breakMinutes: string
+      finish: string | null
+      total: string
+    }> = {}
     timesheet.dayEntries.forEach(entry => {
       data[entry.dayName] = {
         date: entry.date,

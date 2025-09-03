@@ -2,8 +2,9 @@
 
 import { useSession, signOut } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { format, startOfWeek, addDays, addWeeks, subWeeks } from 'date-fns'
+import Image from 'next/image'
 
 interface DayData {
   date: string
@@ -34,17 +35,7 @@ export default function Home() {
   })
   const [loading, setLoading] = useState(false)
 
-  useEffect(() => {
-    if (status === 'loading') return
-    if (status === 'unauthenticated') {
-      router.push('/login')
-      return
-    }
-    
-    initializeWeek()
-  }, [status, router, currentWeek])
-
-  const initializeWeek = () => {
+  const initializeWeek = useCallback(() => {
     const weekStart = format(currentWeek, 'yyyy-MM-dd')
     const newData: Record<string, DayData> = {}
     
@@ -70,7 +61,17 @@ export default function Home() {
 
     setWeekData(newWeekData)
     calculateTotals(newWeekData)
-  }
+  }, [currentWeek])
+
+  useEffect(() => {
+    if (status === 'loading') return
+    if (status === 'unauthenticated') {
+      router.push('/login')
+      return
+    }
+    
+    initializeWeek()
+  }, [status, router, initializeWeek])
 
   const calculateTotals = (data: WeekData) => {
     let totalMinutes = 0
@@ -148,7 +149,7 @@ export default function Home() {
       } else {
         alert('Failed to save timesheet')
       }
-    } catch (error) {
+    } catch {
       alert('Error saving timesheet')
     }
     setLoading(false)
@@ -176,9 +177,11 @@ export default function Home() {
             </div>
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-2">
-                <img
-                  src={session.user?.image || ''}
-                  alt={session.user?.name || ''}
+                <Image
+                  src={session.user?.image || '/default-avatar.svg'}
+                  alt={session.user?.name || 'User'}
+                  width={32}
+                  height={32}
                   className="w-8 h-8 rounded-full"
                 />
                 <span className="text-gray-700">{session.user?.name}</span>
