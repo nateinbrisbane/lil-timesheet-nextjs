@@ -34,6 +34,8 @@ export default function Home() {
     data: {}
   })
   const [loading, setLoading] = useState(false)
+  const [dataExists, setDataExists] = useState(false)
+  const [loadingWeekData, setLoadingWeekData] = useState(false)
 
   const timeToMinutes = useCallback((time: string): number => {
     const [hours, minutes] = time.split(':').map(Number)
@@ -74,8 +76,47 @@ export default function Home() {
     setWeekData(updatedData)
   }, [timeToMinutes, minutesToTime])
 
-  const initializeWeek = useCallback(() => {
+  const loadWeekData = useCallback(async () => {
+    if (!session) return
+    
+    setLoadingWeekData(true)
     const weekStart = format(currentWeek, 'yyyy-MM-dd')
+    
+    try {
+      // Try to fetch existing data from database
+      const response = await fetch(`/api/timesheet?weekStart=${weekStart}`)
+      
+      if (response.ok) {
+        const result = await response.json()
+        if (result.success && result.data) {
+          // Data exists in database - use it
+          const existingData = {
+            weekStart: result.data.weekStart,
+            weeklyTotal: result.data.weeklyTotal,
+            data: result.data.data
+          }
+          setWeekData(existingData)
+          setDataExists(true)
+          calculateTotals(existingData)
+          setLoadingWeekData(false)
+          return
+        }
+      }
+      
+      // No data exists - initialize with defaults
+      initializeWeekDefaults(weekStart)
+      setDataExists(false)
+    } catch (error) {
+      console.error('Error loading week data:', error)
+      // Fallback to defaults on error
+      initializeWeekDefaults(weekStart)
+      setDataExists(false)
+    }
+    
+    setLoadingWeekData(false)
+  }, [currentWeek, session, calculateTotals])
+
+  const initializeWeekDefaults = useCallback((weekStart: string) => {
     const newData: Record<string, DayData> = {}
     
     dayNames.forEach((day, index) => {
@@ -123,8 +164,15 @@ export default function Home() {
       return
     }
     
-    initializeWeek()
-  }, [status, router, session, initializeWeek])
+    loadWeekData()
+  }, [status, router, session, loadWeekData])
+
+  // Load data when week changes
+  useEffect(() => {
+    if (session) {
+      loadWeekData()
+    }
+  }, [currentWeek, session, loadWeekData])
 
 
   const handleInputChange = (day: string, field: keyof DayData, value: string) => {
@@ -148,6 +196,12 @@ export default function Home() {
     setCurrentWeek(newWeek)
   }
 
+  const hasWorkingHours = useCallback(() => {
+    return Object.values(weekData.data).some(day => {
+      return day.start && day.finish && day.start !== '' && day.finish !== ''
+    })
+  }, [weekData])
+
   const saveTimesheet = async () => {
     if (!session) return
     
@@ -161,6 +215,7 @@ export default function Home() {
       
       if (response.ok) {
         alert('Timesheet saved successfully!')
+        setDataExists(true) // Mark as saved
       } else {
         alert('Failed to save timesheet')
       }
@@ -184,8 +239,22 @@ export default function Home() {
     <div className="bg-white rounded-lg shadow-sm">
       <div className="p-3">
         {/* Week Info */}
-        <div className="mb-3">
+        <div className="mb-3 flex justify-between items-center">
           <p className="text-gray-600 text-sm">Week starting {format(currentWeek, 'dd/MM/yyyy')}</p>
+          <div className="flex items-center gap-2">
+            {loadingWeekData && (
+              <span className="text-blue-600 text-sm">Loading...</span>
+            )}
+            {!loadingWeekData && (
+              <span className={`text-sm px-2 py-1 rounded-full ${
+                dataExists 
+                  ? 'bg-green-100 text-green-800' 
+                  : 'bg-amber-100 text-amber-800'
+              }`}>
+                {dataExists ? '✓ Saved in database' : '⚠ Not saved yet'}
+              </span>
+            )}
+          </div>
         </div>
 
         {/* Week Navigation */}
@@ -285,22 +354,42 @@ export default function Home() {
         </div>
 
         {/* Action Buttons */}
-        <div className="mt-3 flex justify-center gap-4">
-          <button
-            onClick={saveTimesheet}
-            disabled={loading}
-            className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 hover:shadow-lg transition-all duration-200 ease-in-out transform hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:shadow-none"
-          >
-            {loading ? 'Saving...' : 'Save Timesheet'}
-          </button>
+        <div className="mt-3">
+          <div className="flex justify-center gap-4">
+            <button
+              onClick={saveTimesheet}
+              disabled={loading}
+              className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 hover:shadow-lg transition-all duration-200 ease-in-out transform hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:shadow-none"
+            >
+              {loading ? 'Saving...' : 'Save Timesheet'}
+            </button>
+            
+            <button
+              onClick={() => router.push(`/invoice?weekStart=${weekData.weekStart}`)}
+              disabled={!weekData.weekStart || !dataExists || !hasWorkingHours()}
+              className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 hover:shadow-lg transition-all duration-200 ease-in-out transform hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:shadow-none"
+              title={
+                !dataExists 
+                  ? 'Please save timesheet first' 
+                  : !hasWorkingHours() 
+                    ? 'No working hours entered' 
+                    : 'Generate invoice for this week'
+              }
+            >
+              Generate Invoice
+            </button>
+          </div>
           
-          <button
-            onClick={() => router.push(`/invoice?weekStart=${weekData.weekStart}`)}
-            disabled={!weekData.weekStart}
-            className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 hover:shadow-lg transition-all duration-200 ease-in-out transform hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:shadow-none"
-          >
-            Generate Invoice
-          </button>
+          {/* Invoice Button Status Message */}
+          {(!dataExists || !hasWorkingHours()) && (
+            <div className="mt-2 text-center">
+              <p className="text-sm text-gray-600">
+                {!dataExists && !hasWorkingHours() && 'Enter working hours and save timesheet to generate invoice'}
+                {!dataExists && hasWorkingHours() && 'Save timesheet first to generate invoice'}  
+                {dataExists && !hasWorkingHours() && 'No working hours entered - cannot generate invoice'}
+              </p>
+            </div>
+          )}
         </div>
       </div>
     </div>
