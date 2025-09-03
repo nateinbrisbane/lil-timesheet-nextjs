@@ -189,12 +189,6 @@ export default function Home() {
     calculateTotals(newWeekData)
   }
 
-  const navigateWeek = (direction: 'prev' | 'next') => {
-    const newWeek = direction === 'prev' 
-      ? subWeeks(currentWeek, 1)
-      : addWeeks(currentWeek, 1)
-    setCurrentWeek(newWeek)
-  }
 
   const jumpToWeek = (weeksOffset: number) => {
     const newWeek = addWeeks(startOfWeek(new Date(), { weekStartsOn: 1 }), weeksOffset)
@@ -249,9 +243,11 @@ export default function Home() {
   return (
     <div className="bg-white rounded-lg shadow-sm">
       <div className="p-3">
-        {/* Week Info */}
+        {/* Week Range and Status */}
         <div className="mb-3 flex justify-between items-center">
-          <p className="text-gray-600 text-sm">Week starting {format(currentWeek, 'dd/MM/yyyy')}</p>
+          <div className="text-lg font-semibold text-gray-700">
+            {format(currentWeek, 'dd/MM/yyyy')} - {format(addDays(currentWeek, 6), 'dd/MM/yyyy')}
+          </div>
           <div className="flex items-center gap-2">
             {loadingWeekData && (
               <span className="text-blue-600 text-sm">Loading...</span>
@@ -270,76 +266,55 @@ export default function Home() {
 
         {/* Week Navigation */}
         <div className="bg-white rounded-lg shadow-sm p-3 mb-3">
-          {/* Main Navigation */}
-          <div className="flex justify-between items-center mb-3">
+          {/* Quick Navigation */}
+          <div className="flex flex-wrap justify-center gap-2 mb-3">
             <button
-              onClick={() => navigateWeek('prev')}
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 hover:shadow-lg transition-all duration-200 ease-in-out transform hover:scale-105 active:scale-95"
+              onClick={() => jumpToWeek(-4)}
+              className="px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded hover:bg-gray-200 transition-colors"
             >
-              ← Previous
+              4 weeks ago
             </button>
-            <div className="text-lg font-semibold text-gray-700">
-              {format(currentWeek, 'dd/MM/yyyy')} - {format(addDays(currentWeek, 6), 'dd/MM/yyyy')}
-            </div>
             <button
-              onClick={() => navigateWeek('next')}
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 hover:shadow-lg transition-all duration-200 ease-in-out transform hover:scale-105 active:scale-95"
+              onClick={() => jumpToWeek(-2)}
+              className="px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded hover:bg-gray-200 transition-colors"
             >
-              Next →
+              2 weeks ago
+            </button>
+            <button
+              onClick={() => jumpToWeek(-1)}
+              className="px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded hover:bg-gray-200 transition-colors"
+            >
+              Last week
+            </button>
+            <button
+              onClick={() => jumpToWeek(0)}
+              className="px-3 py-1 text-sm bg-green-100 text-green-700 rounded hover:bg-green-200 transition-colors font-medium"
+            >
+              This week
+            </button>
+            <button
+              onClick={() => jumpToWeek(1)}
+              className="px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded hover:bg-gray-200 transition-colors"
+            >
+              Next week
+            </button>
+            <button
+              onClick={() => jumpToWeek(2)}
+              className="px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded hover:bg-gray-200 transition-colors"
+            >
+              2 weeks ahead
             </button>
           </div>
           
-          {/* Quick Navigation */}
-          <div className="border-t pt-3">
-            <div className="flex flex-wrap justify-center gap-2 mb-3">
-              <button
-                onClick={() => jumpToWeek(-4)}
-                className="px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded hover:bg-gray-200 transition-colors"
-              >
-                4 weeks ago
-              </button>
-              <button
-                onClick={() => jumpToWeek(-2)}
-                className="px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded hover:bg-gray-200 transition-colors"
-              >
-                2 weeks ago
-              </button>
-              <button
-                onClick={() => jumpToWeek(-1)}
-                className="px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded hover:bg-gray-200 transition-colors"
-              >
-                Last week
-              </button>
-              <button
-                onClick={() => jumpToWeek(0)}
-                className="px-3 py-1 text-sm bg-green-100 text-green-700 rounded hover:bg-green-200 transition-colors font-medium"
-              >
-                This week
-              </button>
-              <button
-                onClick={() => jumpToWeek(1)}
-                className="px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded hover:bg-gray-200 transition-colors"
-              >
-                Next week
-              </button>
-              <button
-                onClick={() => jumpToWeek(2)}
-                className="px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded hover:bg-gray-200 transition-colors"
-              >
-                2 weeks ahead
-              </button>
-            </div>
-            
-            {/* Date Picker */}
-            <div className="flex justify-center items-center gap-3">
-              <label className="text-sm text-gray-600">Jump to specific week:</label>
-              <input
-                type="date"
-                onChange={handleDateChange}
-                value={format(currentWeek, 'yyyy-MM-dd')}
-                className="px-3 py-1 text-sm border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              />
-            </div>
+          {/* Date Picker */}
+          <div className="flex justify-center items-center gap-3">
+            <label className="text-sm text-gray-600">Jump to specific week:</label>
+            <input
+              type="date"
+              onChange={handleDateChange}
+              value={format(currentWeek, 'yyyy-MM-dd')}
+              className="px-3 py-1 text-sm border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            />
           </div>
         </div>
 
