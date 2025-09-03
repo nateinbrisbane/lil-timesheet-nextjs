@@ -18,7 +18,7 @@ async function checkAdminAccess() {
   return user?.role === 'ADMIN'
 }
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     const isAdmin = await checkAdminAccess()
     if (!isAdmin) {
@@ -71,7 +71,10 @@ export async function PATCH(request: NextRequest) {
       return NextResponse.json({ error: 'User ID required' }, { status: 400 })
     }
 
-    const updateData: any = {}
+    const updateData: {
+      role?: 'USER' | 'ADMIN'
+      status?: 'ACTIVE' | 'INACTIVE' | 'PENDING'
+    } = {}
     if (role && ['USER', 'ADMIN'].includes(role)) {
       updateData.role = role
     }

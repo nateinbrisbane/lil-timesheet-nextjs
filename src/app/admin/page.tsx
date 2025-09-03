@@ -2,7 +2,7 @@
 
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import Image from 'next/image'
 
 interface User {
@@ -26,17 +26,7 @@ export default function AdminDashboard() {
   const [loading, setLoading] = useState(true)
   const [updating, setUpdating] = useState<string | null>(null)
 
-  useEffect(() => {
-    if (status === 'loading') return
-    if (status === 'unauthenticated') {
-      router.push('/login')
-      return
-    }
-    
-    fetchUsers()
-  }, [status, router])
-
-  const fetchUsers = async () => {
+  const fetchUsers = useCallback(async () => {
     try {
       const response = await fetch('/api/admin/users')
       if (response.ok) {
@@ -49,7 +39,18 @@ export default function AdminDashboard() {
       console.error('Error fetching users:', error)
     }
     setLoading(false)
-  }
+  }, [router])
+
+  useEffect(() => {
+    if (status === 'loading') return
+    if (status === 'unauthenticated') {
+      router.push('/login')
+      return
+    }
+    
+    fetchUsers()
+  }, [status, router, fetchUsers])
+
 
   const updateUser = async (userId: string, field: 'role' | 'status', value: string) => {
     setUpdating(userId)
