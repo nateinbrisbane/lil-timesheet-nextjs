@@ -214,22 +214,22 @@ function InvoicePageContent() {
   const totalIncludingGST = subtotalBeforeGST * (1 + gstPercentage);
 
   if (!session) {
-    return <div className="p-8">Please log in to view invoices.</div>;
+    return <div className="p-4 sm:p-8">Please log in to view invoices.</div>;
   }
 
   if (loading || invoiceDataLoading) {
-    return <div className="p-8">Loading invoice...</div>;
+    return <div className="p-4 sm:p-8">Loading invoice...</div>;
   }
 
   console.log('Checking settings state:', { globalSettings: !!globalSettings, selectedTemplate: !!selectedTemplate, loading, invoiceDataLoading });
   
   if (!globalSettings || !selectedTemplate) {
     return (
-      <div className="p-8">
-        <p>Invoice settings not configured. Please set up your invoice settings and templates first.</p>
+      <div className="p-4 sm:p-8">
+        <p className="text-sm sm:text-base">Invoice settings not configured. Please set up your invoice settings and templates first.</p>
         <button
           onClick={() => router.push('/settings')}
-          className="mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
+          className="mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors text-sm sm:text-base"
         >
           Go to Settings
         </button>
@@ -250,15 +250,15 @@ function InvoicePageContent() {
   return (
     <div className="min-h-screen bg-white">
       {/* Print/Back buttons - hidden when printing */}
-      <div className="print:hidden p-4 bg-gray-50 flex justify-between items-center">
+      <div className="print:hidden p-3 sm:p-4 bg-gray-50 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-0">
         <button
           onClick={handleBack}
-          className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
+          className="px-3 sm:px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors text-sm sm:text-base"
         >
           ← Back to Timesheet
         </button>
         
-        <div className="flex items-center gap-4">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4 w-full sm:w-auto">
           {invoiceTemplates.length > 1 && (
             <select
               value={selectedTemplate?.id || ''}
@@ -266,7 +266,7 @@ function InvoicePageContent() {
                 const template = invoiceTemplates.find(t => t.id === e.target.value);
                 setSelectedTemplate(template || null);
               }}
-              className="px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full sm:w-auto px-2 sm:px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm sm:text-base"
             >
               {invoiceTemplates.map((template) => (
                 <option key={template.id} value={template.id}>
@@ -278,7 +278,7 @@ function InvoicePageContent() {
           
           <button
             onClick={handlePrint}
-            className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition-colors"
+            className="w-full sm:w-auto px-3 sm:px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition-colors text-sm sm:text-base"
           >
             Print Invoice
           </button>
@@ -286,12 +286,12 @@ function InvoicePageContent() {
       </div>
 
       {/* Invoice Content */}
-      <div className="max-w-4xl mx-auto p-8 bg-white">
+      <div className="max-w-4xl mx-auto p-4 sm:p-8 bg-white">
         {/* Header */}
-        <div className="border-b-4 border-blue-600 pb-4 mb-8">
-          <h1 className="text-4xl font-bold text-blue-600 mb-6">TAX INVOICE</h1>
+        <div className="border-b-4 border-blue-600 pb-3 sm:pb-4 mb-6 sm:mb-8">
+          <h1 className="text-2xl sm:text-4xl font-bold text-blue-600 mb-4 sm:mb-6">TAX INVOICE</h1>
           
-          <div className="space-y-2 text-lg">
+          <div className="space-y-1 sm:space-y-2 text-sm sm:text-lg">
             <div>
               <span className="font-medium">Invoice #:</span> {invoiceNumber}
             </div>
@@ -314,41 +314,43 @@ function InvoicePageContent() {
         </div>
 
         {/* Invoice Table */}
-        <div className="mb-8">
-          <table className="w-full border-collapse">
-            <thead>
-              <tr className="bg-orange-100">
-                <th className="border border-gray-400 px-4 py-3 text-left font-medium">Week Ending</th>
-                <th className="border border-gray-400 px-4 py-3 text-left font-medium">Days Worked</th>
-                <th className="border border-gray-400 px-4 py-3 text-left font-medium">Rate Per Day ($)</th>
-                <th className="border border-gray-400 px-4 py-3 text-left font-medium">Subtotal Before GST ($)</th>
-                <th className="border border-gray-400 px-4 py-3 text-left font-medium">GST {(getGstPercentage() * 100).toFixed(0)}% ($)</th>
-                <th className="border border-gray-400 px-4 py-3 text-left font-medium">Total Including GST ($)</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td className="border border-gray-400 px-4 py-3">{getWeekEndingDate()}</td>
-                <td className="border border-gray-400 px-4 py-3">{daysWorked.toFixed(1)}</td>
-                <td className="border border-gray-400 px-4 py-3">${getDayRate().toLocaleString('en-AU', { minimumFractionDigits: 2 })}</td>
-                <td className="border border-gray-400 px-4 py-3">${subtotalBeforeGST.toLocaleString('en-AU', { minimumFractionDigits: 2 })}</td>
-                <td className="border border-gray-400 px-4 py-3">${gstAmount.toLocaleString('en-AU', { minimumFractionDigits: 2 })}</td>
-                <td className="border border-gray-400 px-4 py-3">${totalIncludingGST.toLocaleString('en-AU', { minimumFractionDigits: 2 })}</td>
-              </tr>
-              <tr className="bg-orange-50 font-medium">
-                <td className="border border-gray-400 px-4 py-3">Total</td>
-                <td className="border border-gray-400 px-4 py-3">{daysWorked.toFixed(1)}</td>
-                <td className="border border-gray-400 px-4 py-3">-</td>
-                <td className="border border-gray-400 px-4 py-3">${subtotalBeforeGST.toLocaleString('en-AU', { minimumFractionDigits: 2 })}</td>
-                <td className="border border-gray-400 px-4 py-3">${gstAmount.toLocaleString('en-AU', { minimumFractionDigits: 2 })}</td>
-                <td className="border border-gray-400 px-4 py-3">${totalIncludingGST.toLocaleString('en-AU', { minimumFractionDigits: 2 })}</td>
-              </tr>
-            </tbody>
-          </table>
+        <div className="mb-6 sm:mb-8">
+          <div className="overflow-x-auto">
+            <table className="w-full border-collapse min-w-[600px]">
+              <thead>
+                <tr className="bg-orange-100">
+                  <th className="border border-gray-400 px-2 sm:px-4 py-2 sm:py-3 text-left font-medium text-xs sm:text-sm">Week Ending</th>
+                  <th className="border border-gray-400 px-2 sm:px-4 py-2 sm:py-3 text-left font-medium text-xs sm:text-sm">Days</th>
+                  <th className="border border-gray-400 px-2 sm:px-4 py-2 sm:py-3 text-left font-medium text-xs sm:text-sm">Rate/Day ($)</th>
+                  <th className="border border-gray-400 px-2 sm:px-4 py-2 sm:py-3 text-left font-medium text-xs sm:text-sm">Subtotal ($)</th>
+                  <th className="border border-gray-400 px-2 sm:px-4 py-2 sm:py-3 text-left font-medium text-xs sm:text-sm">GST {(getGstPercentage() * 100).toFixed(0)}% ($)</th>
+                  <th className="border border-gray-400 px-2 sm:px-4 py-2 sm:py-3 text-left font-medium text-xs sm:text-sm">Total ($)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td className="border border-gray-400 px-2 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm">{getWeekEndingDate()}</td>
+                  <td className="border border-gray-400 px-2 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm">{daysWorked.toFixed(1)}</td>
+                  <td className="border border-gray-400 px-2 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm">${getDayRate().toLocaleString('en-AU', { minimumFractionDigits: 2 })}</td>
+                  <td className="border border-gray-400 px-2 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm">${subtotalBeforeGST.toLocaleString('en-AU', { minimumFractionDigits: 2 })}</td>
+                  <td className="border border-gray-400 px-2 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm">${gstAmount.toLocaleString('en-AU', { minimumFractionDigits: 2 })}</td>
+                  <td className="border border-gray-400 px-2 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm">${totalIncludingGST.toLocaleString('en-AU', { minimumFractionDigits: 2 })}</td>
+                </tr>
+                <tr className="bg-orange-50 font-medium">
+                  <td className="border border-gray-400 px-2 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm">Total</td>
+                  <td className="border border-gray-400 px-2 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm">{daysWorked.toFixed(1)}</td>
+                  <td className="border border-gray-400 px-2 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm">-</td>
+                  <td className="border border-gray-400 px-2 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm">${subtotalBeforeGST.toLocaleString('en-AU', { minimumFractionDigits: 2 })}</td>
+                  <td className="border border-gray-400 px-2 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm">${gstAmount.toLocaleString('en-AU', { minimumFractionDigits: 2 })}</td>
+                  <td className="border border-gray-400 px-2 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm">${totalIncludingGST.toLocaleString('en-AU', { minimumFractionDigits: 2 })}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
 
         {/* Footer for print */}
-        <div className="text-sm text-gray-600 mt-12 print:block hidden">
+        <div className="text-xs sm:text-sm text-gray-600 mt-8 sm:mt-12 print:block hidden">
           <p>Total Hours Worked: {getTotalHours().toFixed(2)} hours</p>
         </div>
       </div>
@@ -381,7 +383,7 @@ function InvoicePageContent() {
 
 export default function InvoicePage() {
   return (
-    <Suspense fallback={<div className="p-8">Loading invoice...</div>}>
+    <Suspense fallback={<div className="p-4 sm:p-8">Loading invoice...</div>}>
       <InvoicePageContent />
     </Suspense>
   );

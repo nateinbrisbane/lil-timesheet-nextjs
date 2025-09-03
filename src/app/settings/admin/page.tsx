@@ -113,7 +113,7 @@ export default function AdminSettings() {
 
   if (status === 'loading' || loading) {
     return (
-      <div className="p-8">
+      <div className="p-4 sm:p-8">
         <div className="text-gray-600">Loading...</div>
       </div>
     )
@@ -121,7 +121,7 @@ export default function AdminSettings() {
 
   if (session?.user?.role !== 'ADMIN') {
     return (
-      <div className="p-8">
+      <div className="p-4 sm:p-8">
         <div className="text-red-600">Access denied. Admin privileges required.</div>
       </div>
     )
@@ -130,80 +130,80 @@ export default function AdminSettings() {
   return (
     <>
       {/* Header */}
-      <div className="mb-8">
-        <h2 className="text-2xl font-bold text-gray-900">Admin Settings</h2>
-        <p className="text-gray-600 mt-2">Manage users, control access permissions, and configure system settings.</p>
+      <div className="mb-6 sm:mb-8 px-4 sm:px-0">
+        <h2 className="text-xl sm:text-2xl font-bold text-gray-900">Admin Settings</h2>
+        <p className="text-sm sm:text-base text-gray-600 mt-2">Manage users, control access permissions, and configure system settings.</p>
       </div>
 
         {/* User Management Section */}
-        <div className="mb-8">
-          <h2 className="text-xl font-semibold text-gray-800 mb-6">User Management</h2>
+        <div className="mb-6 sm:mb-8 px-4 sm:px-0">
+          <h2 className="text-lg sm:text-xl font-semibold text-gray-800 mb-4 sm:mb-6">User Management</h2>
           
           {users.length === 0 ? (
-            <div className="text-center py-8 text-gray-500">
-              No users found.
+            <div className="text-center py-6 sm:py-8 text-gray-500">
+              <p className="text-sm sm:text-base">No users found.</p>
             </div>
           ) : (
-            <div className="bg-white rounded-lg border">
+            <div className="bg-white rounded-lg border overflow-hidden">
               <div className="overflow-x-auto">
                 <table className="min-w-full divide-y divide-gray-200">
                   <thead className="bg-gray-50">
                     <tr>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Role</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Timesheets</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Last Login</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Created</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                      <th className="px-3 sm:px-6 py-2 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User</th>
+                      <th className="px-3 sm:px-6 py-2 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Role</th>
+                      <th className="px-3 sm:px-6 py-2 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                      <th className="px-3 sm:px-6 py-2 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden sm:table-cell">Timesheets</th>
+                      <th className="px-3 sm:px-6 py-2 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden md:table-cell">Last Login</th>
+                      <th className="px-3 sm:px-6 py-2 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden lg:table-cell">Created</th>
+                      <th className="px-3 sm:px-6 py-2 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200">
                     {users.map((user) => (
                       <tr key={user.id} className="hover:bg-gray-50">
-                        <td className="px-6 py-4 whitespace-nowrap">
+                        <td className="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
                           <div className="flex items-center">
-                            <div className="flex-shrink-0 h-10 w-10">
-                              <div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center">
-                                <span className="text-blue-700 text-sm font-medium">
+                            <div className="flex-shrink-0 h-8 w-8 sm:h-10 sm:w-10">
+                              <div className="h-8 w-8 sm:h-10 sm:w-10 rounded-full bg-blue-100 flex items-center justify-center">
+                                <span className="text-blue-700 text-xs sm:text-sm font-medium">
                                   {user.name?.charAt(0)?.toUpperCase() || user.email.charAt(0).toUpperCase()}
                                 </span>
                               </div>
                             </div>
-                            <div className="ml-4">
-                              <div className="text-sm font-medium text-gray-900">{user.name || 'No name'}</div>
-                              <div className="text-sm text-gray-500">{user.email}</div>
+                            <div className="ml-2 sm:ml-4 min-w-0 flex-1">
+                              <div className="text-xs sm:text-sm font-medium text-gray-900 truncate">{user.name || 'No name'}</div>
+                              <div className="text-xs sm:text-sm text-gray-500 truncate">{user.email}</div>
                             </div>
                           </div>
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
+                        <td className="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
                           <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getRoleColor(user.role)}`}>
                             {user.role}
                           </span>
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
+                        <td className="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
                           <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(user.status)}`}>
                             {user.status}
                           </span>
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        <td className="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900 hidden sm:table-cell">
                           {user._count.timesheets}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        <td className="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-500 hidden md:table-cell">
                           {user.lastLoginAt ? formatDate(user.lastLoginAt) : 'Never'}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        <td className="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-500 hidden lg:table-cell">
                           {formatDate(user.createdAt)}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                          <div className="flex space-x-2">
+                        <td className="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm font-medium">
+                          <div className="flex flex-col sm:flex-row space-y-1 sm:space-y-0 sm:space-x-2">
                             {/* Status Toggle */}
                             <button
                               onClick={() => updateUser(user.id, { 
                                 status: user.status === 'ACTIVE' ? 'INACTIVE' : 'ACTIVE' 
                               })}
                               disabled={updating === user.id}
-                              className={`px-3 py-1 text-xs font-medium rounded-md transition-colors ${
+                              className={`px-2 sm:px-3 py-1 text-xs font-medium rounded-md transition-colors whitespace-nowrap ${
                                 user.status === 'ACTIVE' 
                                   ? 'bg-red-100 text-red-700 hover:bg-red-200' 
                                   : 'bg-green-100 text-green-700 hover:bg-green-200'
@@ -219,13 +219,14 @@ export default function AdminSettings() {
                                   role: user.role === 'ADMIN' ? 'USER' : 'ADMIN' 
                                 })}
                                 disabled={updating === user.id}
-                                className={`px-3 py-1 text-xs font-medium rounded-md transition-colors ${
+                                className={`px-2 sm:px-3 py-1 text-xs font-medium rounded-md transition-colors whitespace-nowrap ${
                                   user.role === 'ADMIN'
                                     ? 'bg-blue-100 text-blue-700 hover:bg-blue-200'
                                     : 'bg-purple-100 text-purple-700 hover:bg-purple-200'
                                 } ${updating === user.id ? 'opacity-50 cursor-not-allowed' : ''}`}
                               >
-                                {user.role === 'ADMIN' ? 'Make User' : 'Make Admin'}
+                                <span className="hidden sm:inline">{user.role === 'ADMIN' ? 'Make User' : 'Make Admin'}</span>
+                                <span className="sm:hidden">{user.role === 'ADMIN' ? 'User' : 'Admin'}</span>
                               </button>
                             )}
                           </div>
@@ -240,10 +241,10 @@ export default function AdminSettings() {
         </div>
 
         {/* System Settings Section (Future) */}
-        <div className="border-t pt-8">
-          <h2 className="text-xl font-semibold text-gray-800 mb-4">System Settings</h2>
-          <div className="bg-gray-50 rounded-lg p-6">
-            <p className="text-gray-600">Additional system configuration options will be available here in future updates.</p>
+        <div className="border-t pt-6 sm:pt-8 px-4 sm:px-0">
+          <h2 className="text-lg sm:text-xl font-semibold text-gray-800 mb-4">System Settings</h2>
+          <div className="bg-gray-50 rounded-lg p-4 sm:p-6">
+            <p className="text-sm sm:text-base text-gray-600">Additional system configuration options will be available here in future updates.</p>
           </div>
         </div>
     </>

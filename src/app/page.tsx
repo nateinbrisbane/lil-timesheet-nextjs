@@ -244,16 +244,16 @@ export default function Home() {
     <div className="bg-white rounded-lg shadow-sm">
       <div className="p-3">
         {/* Week Range and Status */}
-        <div className="mb-3 flex justify-between items-center">
-          <div className="text-lg font-semibold text-gray-700">
+        <div className="mb-3 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+          <div className="text-base sm:text-lg font-semibold text-gray-700">
             {format(currentWeek, 'dd/MM/yyyy')} - {format(addDays(currentWeek, 6), 'dd/MM/yyyy')}
           </div>
           <div className="flex items-center gap-2">
             {loadingWeekData && (
-              <span className="text-blue-600 text-sm">Loading...</span>
+              <span className="text-blue-600 text-xs sm:text-sm">Loading...</span>
             )}
             {!loadingWeekData && (
-              <span className={`text-sm px-2 py-1 rounded-full ${
+              <span className={`text-xs sm:text-sm px-2 py-1 rounded-full ${
                 dataExists 
                   ? 'bg-green-100 text-green-800' 
                   : 'bg-amber-100 text-amber-800'
@@ -265,73 +265,79 @@ export default function Home() {
         </div>
 
         {/* Week Navigation */}
-        <div className="bg-white rounded-lg shadow-sm p-3 mb-3">
+        <div className="bg-white rounded-lg shadow-sm p-2 sm:p-3 mb-3">
           {/* Quick Navigation */}
-          <div className="flex flex-wrap justify-center gap-2 mb-3">
+          <div className="flex flex-wrap justify-center gap-1 sm:gap-2 mb-3">
             <button
               onClick={() => jumpToWeek(-4)}
-              className="flex items-center gap-2 px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded hover:bg-gray-200 transition-colors"
+              className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1 text-xs sm:text-sm bg-gray-100 text-gray-700 rounded hover:bg-gray-200 transition-colors"
             >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
               </svg>
-              4 weeks ago
+              <span className="hidden sm:inline">4 weeks ago</span>
+              <span className="sm:hidden">-4w</span>
             </button>
             <button
               onClick={() => jumpToWeek(-2)}
-              className="flex items-center gap-2 px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded hover:bg-gray-200 transition-colors"
+              className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1 text-xs sm:text-sm bg-gray-100 text-gray-700 rounded hover:bg-gray-200 transition-colors"
             >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
               </svg>
-              2 weeks ago
+              <span className="hidden sm:inline">2 weeks ago</span>
+              <span className="sm:hidden">-2w</span>
             </button>
             <button
               onClick={() => jumpToWeek(-1)}
-              className="flex items-center gap-2 px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded hover:bg-gray-200 transition-colors"
+              className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1 text-xs sm:text-sm bg-gray-100 text-gray-700 rounded hover:bg-gray-200 transition-colors"
             >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
               </svg>
-              Last week
+              <span className="hidden sm:inline">Last week</span>
+              <span className="sm:hidden">-1w</span>
             </button>
             <button
               onClick={() => jumpToWeek(0)}
-              className="flex items-center gap-2 px-3 py-1 text-sm bg-green-100 text-green-700 rounded hover:bg-green-200 transition-colors font-medium"
+              className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1 text-xs sm:text-sm bg-green-100 text-green-700 rounded hover:bg-green-200 transition-colors font-medium"
             >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m0 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1h3a1 1 0 001-1V10m-9 4h4" />
               </svg>
-              This week
+              <span className="hidden sm:inline">This week</span>
+              <span className="sm:hidden">Now</span>
             </button>
             <button
               onClick={() => jumpToWeek(1)}
-              className="flex items-center gap-2 px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded hover:bg-gray-200 transition-colors"
+              className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1 text-xs sm:text-sm bg-gray-100 text-gray-700 rounded hover:bg-gray-200 transition-colors"
             >
-              Next week
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <span className="hidden sm:inline">Next week</span>
+              <span className="sm:hidden">+1w</span>
+              <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
               </svg>
             </button>
             <button
               onClick={() => jumpToWeek(2)}
-              className="flex items-center gap-2 px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded hover:bg-gray-200 transition-colors"
+              className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1 text-xs sm:text-sm bg-gray-100 text-gray-700 rounded hover:bg-gray-200 transition-colors"
             >
-              2 weeks ahead
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <span className="hidden sm:inline">2 weeks ahead</span>
+              <span className="sm:hidden">+2w</span>
+              <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
               </svg>
             </button>
           </div>
           
           {/* Date Picker */}
-          <div className="flex justify-center items-center gap-3">
-            <label className="text-sm text-gray-600">Jump to specific week:</label>
+          <div className="flex flex-col sm:flex-row justify-center items-center gap-2 sm:gap-3">
+            <label className="text-xs sm:text-sm text-gray-600">Jump to specific week:</label>
             <input
               type="date"
               onChange={handleDateChange}
               value={format(currentWeek, 'yyyy-MM-dd')}
-              className="px-3 py-1 text-sm border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="px-2 sm:px-3 py-1 text-xs sm:text-sm border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
         </div>
@@ -339,31 +345,34 @@ export default function Home() {
         {/* Timesheet Table */}
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
           <div className="overflow-x-auto">
-            <table className="w-full border-collapse">
+            <table className="w-full border-collapse min-w-[600px]">
               <thead className="bg-gray-100 border-b-2 border-gray-200">
                 <tr>
-                  <th className="px-4 py-2 text-left text-sm font-semibold text-gray-800 border-r border-gray-200">Day</th>
-                  <th className="px-4 py-2 text-left text-sm font-semibold text-gray-800 border-r border-gray-200">Date</th>
-                  <th className="px-4 py-2 text-left text-sm font-semibold text-gray-800 border-r border-gray-200">Start Time</th>
-                  <th className="px-4 py-2 text-left text-sm font-semibold text-gray-800 border-r border-gray-200">Break</th>
-                  <th className="px-4 py-2 text-left text-sm font-semibold text-gray-800 border-r border-gray-200">Finish Time</th>
-                  <th className="px-4 py-2 text-left text-sm font-semibold text-gray-800">Total Hours</th>
+                  <th className="px-2 sm:px-4 py-2 text-left text-xs sm:text-sm font-semibold text-gray-800 border-r border-gray-200">Day</th>
+                  <th className="px-2 sm:px-4 py-2 text-left text-xs sm:text-sm font-semibold text-gray-800 border-r border-gray-200">Date</th>
+                  <th className="px-2 sm:px-4 py-2 text-left text-xs sm:text-sm font-semibold text-gray-800 border-r border-gray-200">Start</th>
+                  <th className="px-2 sm:px-4 py-2 text-left text-xs sm:text-sm font-semibold text-gray-800 border-r border-gray-200">Break</th>
+                  <th className="px-2 sm:px-4 py-2 text-left text-xs sm:text-sm font-semibold text-gray-800 border-r border-gray-200">Finish</th>
+                  <th className="px-2 sm:px-4 py-2 text-left text-xs sm:text-sm font-semibold text-gray-800">Total</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
                 {dayNames.map((day, index) => (
                   <tr key={day} className={`${index >= 5 ? 'bg-blue-50' : 'bg-white'} hover:bg-gray-50 transition-colors`}>
-                    <td className="px-4 py-2 font-semibold text-gray-900 border-r border-gray-200 bg-gray-50">{dayLabels[index]}</td>
-                    <td className="px-4 py-2 text-gray-700 border-r border-gray-200 font-medium">{weekData.data[day]?.date}</td>
-                    <td className="px-4 py-2 border-r border-gray-200">
+                    <td className="px-2 sm:px-4 py-2 font-semibold text-gray-900 border-r border-gray-200 bg-gray-50 text-xs sm:text-sm">
+                      <span className="hidden sm:inline">{dayLabels[index]}</span>
+                      <span className="sm:hidden">{dayLabels[index].slice(0, 3)}</span>
+                    </td>
+                    <td className="px-2 sm:px-4 py-2 text-gray-700 border-r border-gray-200 font-medium text-xs sm:text-sm">{weekData.data[day]?.date}</td>
+                    <td className="px-2 sm:px-4 py-2 border-r border-gray-200">
                       <input
                         type="time"
                         value={weekData.data[day]?.start || ''}
                         onChange={(e) => handleInputChange(day, 'start', e.target.value)}
-                        className="w-full px-2 py-1 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors text-sm"
+                        className="w-full px-1 sm:px-2 py-1 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors text-xs sm:text-sm min-w-[70px]"
                       />
                     </td>
-                    <td className="px-4 py-2 border-r border-gray-200">
+                    <td className="px-2 sm:px-4 py-2 border-r border-gray-200">
                       <div className="flex gap-1 items-center">
                         <input
                           type="number"
@@ -371,7 +380,7 @@ export default function Home() {
                           max="23"
                           value={weekData.data[day]?.breakHours || ''}
                           onChange={(e) => handleInputChange(day, 'breakHours', e.target.value)}
-                          className="w-14 px-1 py-1 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-center transition-colors text-sm"
+                          className="w-10 sm:w-14 px-1 py-1 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-center transition-colors text-xs sm:text-sm"
                         />
                         <span className="text-gray-600 font-medium text-xs">h</span>
                         <input
@@ -380,29 +389,30 @@ export default function Home() {
                           max="59"
                           value={weekData.data[day]?.breakMinutes || ''}
                           onChange={(e) => handleInputChange(day, 'breakMinutes', e.target.value)}
-                          className="w-14 px-1 py-1 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-center transition-colors text-sm"
+                          className="w-10 sm:w-14 px-1 py-1 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-center transition-colors text-xs sm:text-sm"
                         />
                         <span className="text-gray-600 font-medium text-xs">m</span>
                       </div>
                     </td>
-                    <td className="px-4 py-2 border-r border-gray-200">
+                    <td className="px-2 sm:px-4 py-2 border-r border-gray-200">
                       <input
                         type="time"
                         value={weekData.data[day]?.finish || ''}
                         onChange={(e) => handleInputChange(day, 'finish', e.target.value)}
-                        className="w-full px-2 py-1 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors text-sm"
+                        className="w-full px-1 sm:px-2 py-1 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors text-xs sm:text-sm min-w-[70px]"
                       />
                     </td>
-                    <td className="px-4 py-2 font-mono text-base font-semibold text-blue-600">{weekData.data[day]?.total}</td>
+                    <td className="px-2 sm:px-4 py-2 font-mono text-sm sm:text-base font-semibold text-blue-600">{weekData.data[day]?.total}</td>
                   </tr>
                 ))}
               </tbody>
               <tfoot className="bg-gray-100 border-t-2 border-gray-200">
                 <tr>
-                  <td colSpan={5} className="px-4 py-2 text-right font-bold text-gray-900 border-r border-gray-200">
-                    Weekly Total:
+                  <td colSpan={5} className="px-2 sm:px-4 py-2 text-right font-bold text-gray-900 border-r border-gray-200 text-sm sm:text-base">
+                    <span className="hidden sm:inline">Weekly Total:</span>
+                    <span className="sm:hidden">Total:</span>
                   </td>
-                  <td className="px-4 py-2 font-mono font-bold text-lg text-green-600">
+                  <td className="px-2 sm:px-4 py-2 font-mono font-bold text-base sm:text-lg text-green-600">
                     {weekData.weeklyTotal}
                   </td>
                 </tr>
@@ -413,11 +423,11 @@ export default function Home() {
 
         {/* Action Buttons */}
         <div className="mt-3">
-          <div className="flex justify-center gap-4">
+          <div className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4">
             <button
               onClick={saveTimesheet}
               disabled={loading}
-              className="flex items-center gap-2 px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 hover:shadow-lg transition-all duration-200 ease-in-out transform hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:shadow-none"
+              className="flex items-center justify-center gap-2 px-4 sm:px-6 py-2 sm:py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 hover:shadow-lg transition-all duration-200 ease-in-out transform hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:shadow-none text-sm sm:text-base"
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
@@ -428,7 +438,7 @@ export default function Home() {
             <button
               onClick={() => router.push(`/invoice?weekStart=${weekData.weekStart}`)}
               disabled={!weekData.weekStart || !dataExists || !hasWorkingHours()}
-              className="flex items-center gap-2 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 hover:shadow-lg transition-all duration-200 ease-in-out transform hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:shadow-none"
+              className="flex items-center justify-center gap-2 px-4 sm:px-6 py-2 sm:py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 hover:shadow-lg transition-all duration-200 ease-in-out transform hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:shadow-none text-sm sm:text-base"
               title={
                 !dataExists 
                   ? 'Please save timesheet first' 
@@ -440,14 +450,15 @@ export default function Home() {
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
               </svg>
-              Generate Invoice
+              <span className="hidden sm:inline">Generate Invoice</span>
+              <span className="sm:hidden">Invoice</span>
             </button>
           </div>
           
           {/* Invoice Button Status Message */}
           {(!dataExists || !hasWorkingHours()) && (
             <div className="mt-2 text-center">
-              <p className="text-sm text-gray-600">
+              <p className="text-xs sm:text-sm text-gray-600 px-2">
                 {!dataExists && !hasWorkingHours() && 'Enter working hours and save timesheet to generate invoice'}
                 {!dataExists && hasWorkingHours() && 'Save timesheet first to generate invoice'}  
                 {dataExists && !hasWorkingHours() && 'No working hours entered - cannot generate invoice'}

@@ -168,36 +168,38 @@ export default function SettingsPage() {
   }
 
   return (
-    <div className="max-w-6xl mx-auto">
+    <div className="max-w-6xl mx-auto px-4 sm:px-0">
       {/* Header */}
-      <div className="mb-8">
-        <h2 className="text-2xl font-bold text-gray-900">Invoice Settings</h2>
-        <p className="text-gray-600 mt-2">Configure your contractor details and manage invoice templates for different clients.</p>
+      <div className="mb-6 sm:mb-8">
+        <h2 className="text-xl sm:text-2xl font-bold text-gray-900">Invoice Settings</h2>
+        <p className="text-sm sm:text-base text-gray-600 mt-2">Configure your contractor details and manage invoice templates for different clients.</p>
       </div>
 
         {/* Tabs */}
-        <div className="mb-8">
+        <div className="mb-6 sm:mb-8">
           <div className="border-b border-gray-200">
-            <nav className="-mb-px flex space-x-8">
+            <nav className="-mb-px flex space-x-4 sm:space-x-8 overflow-x-auto">
               <button
                 onClick={() => setActiveTab('global')}
-                className={`py-2 px-1 border-b-2 font-medium text-sm ${
+                className={`py-2 px-1 border-b-2 font-medium text-xs sm:text-sm whitespace-nowrap ${
                   activeTab === 'global'
                     ? 'border-blue-500 text-blue-600'
                     : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                 }`}
               >
-                Global Settings
+                <span className="hidden sm:inline">Global Settings</span>
+                <span className="sm:hidden">Global</span>
               </button>
               <button
                 onClick={() => setActiveTab('templates')}
-                className={`py-2 px-1 border-b-2 font-medium text-sm ${
+                className={`py-2 px-1 border-b-2 font-medium text-xs sm:text-sm whitespace-nowrap ${
                   activeTab === 'templates'
                     ? 'border-blue-500 text-blue-600'
                     : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                 }`}
               >
-                Invoice Templates
+                <span className="hidden sm:inline">Invoice Templates</span>
+                <span className="sm:hidden">Templates</span>
               </button>
             </nav>
           </div>
@@ -205,20 +207,20 @@ export default function SettingsPage() {
 
         {/* Global Settings Tab */}
         {activeTab === 'global' && (
-          <div className="bg-white rounded-lg shadow p-6">
-            <h2 className="text-xl font-semibold mb-6">Your Contractor Details</h2>
-            <p className="text-gray-600 mb-6">These are your default contractor details that will appear on all invoices unless overridden by template-specific settings.</p>
+          <div className="bg-white rounded-lg shadow p-4 sm:p-6">
+            <h2 className="text-lg sm:text-xl font-semibold mb-4 sm:mb-6">Your Contractor Details</h2>
+            <p className="text-sm sm:text-base text-gray-600 mb-4 sm:mb-6">These are your default contractor details that will appear on all invoices unless overridden by template-specific settings.</p>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-2">
                   Contractor Name *
                 </label>
                 <input
                   type="text"
                   value={globalSettings.contractorName}
                   onChange={(e) => setGlobalSettings({...globalSettings, contractorName: e.target.value})}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-2 sm:px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm sm:text-base"
                   required
                 />
               </div>
@@ -264,7 +266,7 @@ export default function SettingsPage() {
                 />
               </div>
               
-              <div className="md:col-span-2">
+              <div className="sm:col-span-2">
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Address Line 1 *
                 </label>
@@ -278,7 +280,7 @@ export default function SettingsPage() {
                 />
               </div>
               
-              <div className="md:col-span-2">
+              <div className="sm:col-span-2">
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Address Line 2
                 </label>
@@ -334,11 +336,11 @@ export default function SettingsPage() {
               </div>
             </div>
             
-            <div className="mt-6 flex justify-end">
+            <div className="mt-4 sm:mt-6 flex justify-end">
               <button
                 onClick={saveGlobalSettings}
                 disabled={saving}
-                className="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors disabled:opacity-50"
+                className="w-full sm:w-auto px-4 sm:px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors disabled:opacity-50 text-sm sm:text-base"
               >
                 {saving ? 'Saving...' : 'Save Global Settings'}
               </button>
@@ -350,11 +352,11 @@ export default function SettingsPage() {
         {activeTab === 'templates' && (
           <div className="space-y-6">
             {/* Templates Header */}
-            <div className="bg-white rounded-lg shadow p-6">
-              <div className="flex justify-between items-center mb-4">
+            <div className="bg-white rounded-lg shadow p-4 sm:p-6">
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4">
                 <div>
-                  <h2 className="text-xl font-semibold">Invoice Templates</h2>
-                  <p className="text-gray-600 mt-1">Create different templates for different clients with custom rates and settings.</p>
+                  <h2 className="text-lg sm:text-xl font-semibold">Invoice Templates</h2>
+                  <p className="text-sm sm:text-base text-gray-600 mt-1">Create different templates for different clients with custom rates and settings.</p>
                 </div>
                 <button
                   onClick={() => {
@@ -368,7 +370,7 @@ export default function SettingsPage() {
                     });
                     setShowTemplateForm(true);
                   }}
-                  className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition-colors"
+                  className="w-full sm:w-auto px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition-colors text-sm sm:text-base whitespace-nowrap"
                 >
                   + New Template
                 </button>
@@ -376,24 +378,24 @@ export default function SettingsPage() {
 
               {/* Templates List */}
               {templates.length === 0 ? (
-                <div className="text-center py-8 text-gray-500">
-                  <p>No invoice templates yet. Create your first template to get started.</p>
+                <div className="text-center py-6 sm:py-8 text-gray-500">
+                  <p className="text-sm sm:text-base">No invoice templates yet. Create your first template to get started.</p>
                 </div>
               ) : (
                 <div className="space-y-4">
                   {templates.map((template) => (
-                    <div key={template.id} className="border border-gray-200 rounded-lg p-4">
-                      <div className="flex justify-between items-start">
+                    <div key={template.id} className="border border-gray-200 rounded-lg p-3 sm:p-4">
+                      <div className="flex flex-col sm:flex-row justify-between items-start gap-3">
                         <div className="flex-1">
-                          <div className="flex items-center gap-2 mb-2">
-                            <h3 className="font-medium text-lg">{template.templateName}</h3>
+                          <div className="flex flex-col sm:flex-row sm:items-center gap-2 mb-2">
+                            <h3 className="font-medium text-base sm:text-lg">{template.templateName}</h3>
                             {template.isDefault && (
-                              <span className="px-2 py-1 text-xs bg-blue-100 text-blue-800 rounded-full">
+                              <span className="px-2 py-1 text-xs bg-blue-100 text-blue-800 rounded-full self-start">
                                 Default
                               </span>
                             )}
                           </div>
-                          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-gray-600">
+                          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-4 text-xs sm:text-sm text-gray-600">
                             <div>
                               <span className="font-medium">Client:</span> {template.clientName}
                             </div>
@@ -405,19 +407,19 @@ export default function SettingsPage() {
                             </div>
                           </div>
                         </div>
-                        <div className="flex gap-2 ml-4">
+                        <div className="flex gap-2 w-full sm:w-auto sm:ml-4">
                           <button
                             onClick={() => {
                               setEditingTemplate(template);
                               setShowTemplateForm(true);
                             }}
-                            className="px-3 py-1 text-sm bg-blue-100 text-blue-700 rounded hover:bg-blue-200 transition-colors"
+                            className="flex-1 sm:flex-initial px-3 py-1 text-xs sm:text-sm bg-blue-100 text-blue-700 rounded hover:bg-blue-200 transition-colors"
                           >
                             Edit
                           </button>
                           <button
                             onClick={() => template.id && deleteTemplate(template.id)}
-                            className="px-3 py-1 text-sm bg-red-100 text-red-700 rounded hover:bg-red-200 transition-colors"
+                            className="flex-1 sm:flex-initial px-3 py-1 text-xs sm:text-sm bg-red-100 text-red-700 rounded hover:bg-red-200 transition-colors"
                           >
                             Delete
                           </button>
@@ -431,11 +433,11 @@ export default function SettingsPage() {
 
             {/* Template Form Modal */}
             {showTemplateForm && editingTemplate && (
-              <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-                <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-                  <div className="p-6">
-                    <div className="flex justify-between items-center mb-6">
-                      <h3 className="text-xl font-semibold">
+              <div className="fixed inset-0 bg-black bg-opacity-50 flex items-start sm:items-center justify-center p-2 sm:p-4 z-50 overflow-y-auto">
+                <div className="bg-white rounded-lg shadow-xl w-full sm:max-w-2xl sm:max-h-[90vh] sm:overflow-y-auto mt-4 sm:mt-0 mb-4 sm:mb-0">
+                  <div className="p-4 sm:p-6">
+                    <div className="flex justify-between items-center mb-4 sm:mb-6">
+                      <h3 className="text-lg sm:text-xl font-semibold">
                         {editingTemplate.id ? 'Edit Template' : 'New Template'}
                       </h3>
                       <button
@@ -443,24 +445,24 @@ export default function SettingsPage() {
                           setShowTemplateForm(false);
                           setEditingTemplate(null);
                         }}
-                        className="text-gray-400 hover:text-gray-600"
+                        className="text-gray-400 hover:text-gray-600 p-1"
                       >
-                        <span className="text-2xl">×</span>
+                        <span className="text-xl sm:text-2xl">×</span>
                       </button>
                     </div>
 
                     <div className="space-y-4">
                       {/* Basic Template Info */}
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-2">
+                          <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-2">
                             Template Name *
                           </label>
                           <input
                             type="text"
                             value={editingTemplate.templateName}
                             onChange={(e) => setEditingTemplate({...editingTemplate, templateName: e.target.value})}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full px-2 sm:px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm sm:text-base"
                             placeholder="e.g. Client A - Development"
                             required
                           />
@@ -539,7 +541,7 @@ export default function SettingsPage() {
                         <h4 className="text-md font-medium text-gray-900 mb-3">Custom Contractor Details (Optional)</h4>
                         <p className="text-sm text-gray-600 mb-4">Override global contractor details for this template. Leave blank to use global settings.</p>
                         
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                           <div>
                             <label className="block text-sm font-medium text-gray-700 mb-2">
                               Custom Contractor Name
@@ -592,7 +594,7 @@ export default function SettingsPage() {
                             />
                           </div>
                           
-                          <div className="md:col-span-2">
+                          <div className="sm:col-span-2">
                             <label className="block text-sm font-medium text-gray-700 mb-2">
                               Custom Address
                             </label>
@@ -608,19 +610,19 @@ export default function SettingsPage() {
                       </div>
                     </div>
 
-                    <div className="flex justify-end gap-3 mt-6 pt-6 border-t">
+                    <div className="flex flex-col sm:flex-row justify-end gap-3 mt-6 pt-6 border-t">
                       <button
                         onClick={() => {
                           setShowTemplateForm(false);
                           setEditingTemplate(null);
                         }}
-                        className="px-4 py-2 text-gray-700 border border-gray-300 rounded hover:bg-gray-50 transition-colors"
+                        className="w-full sm:w-auto px-4 py-2 text-gray-700 border border-gray-300 rounded hover:bg-gray-50 transition-colors text-sm sm:text-base order-2 sm:order-1"
                       >
                         Cancel
                       </button>
                       <button
                         onClick={() => saveTemplate(editingTemplate)}
-                        className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
+                        className="w-full sm:w-auto px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors text-sm sm:text-base order-1 sm:order-2"
                       >
                         Save Template
                       </button>
