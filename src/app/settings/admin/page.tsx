@@ -113,7 +113,7 @@ export default function AdminSettings() {
 
   if (status === 'loading' || loading) {
     return (
-      <div className="bg-white rounded-lg shadow-sm p-8">
+      <div className="p-8">
         <div className="text-gray-600">Loading...</div>
       </div>
     )
@@ -121,20 +121,19 @@ export default function AdminSettings() {
 
   if (session?.user?.role !== 'ADMIN') {
     return (
-      <div className="bg-white rounded-lg shadow-sm p-8">
+      <div className="p-8">
         <div className="text-red-600">Access denied. Admin privileges required.</div>
       </div>
     )
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-sm">
-      <div className="p-8">
-        {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">Admin Settings</h1>
-          <p className="text-gray-600 mt-2">Manage users, control access permissions, and configure system settings.</p>
-        </div>
+    <>
+      {/* Header */}
+      <div className="mb-8">
+        <h2 className="text-2xl font-bold text-gray-900">Admin Settings</h2>
+        <p className="text-gray-600 mt-2">Manage users, control access permissions, and configure system settings.</p>
+      </div>
 
         {/* User Management Section */}
         <div className="mb-8">
@@ -247,7 +246,6 @@ export default function AdminSettings() {
             <p className="text-gray-600">Additional system configuration options will be available here in future updates.</p>
           </div>
         </div>
-      </div>
-    </div>
+    </>
   )
 }
