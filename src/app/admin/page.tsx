@@ -116,7 +116,7 @@ export default function AdminDashboard() {
               <nav className="flex items-center">
                 <button
                   onClick={() => router.push('/')}
-                  className="text-sm font-medium text-blue-600 hover:text-blue-700 underline decoration-2 underline-offset-4 transition-colors"
+                  className="text-sm font-medium text-blue-600 hover:text-blue-800 hover:bg-blue-50 px-3 py-1 rounded-md underline decoration-2 underline-offset-4 transition-all duration-200 ease-in-out transform hover:scale-105"
                 >
                   ← Back to Timesheet
                 </button>
@@ -124,17 +124,17 @@ export default function AdminDashboard() {
             </div>
             
             {/* User Profile */}
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 hover:bg-purple-50 px-3 py-2 rounded-lg transition-all duration-200 cursor-pointer">
               {session?.user?.image ? (
                 <Image
                   src={session.user.image}
                   alt={session?.user?.name || 'User'}
                   width={36}
                   height={36}
-                  className="w-9 h-9 rounded-full border-2 border-gray-200"
+                  className="w-9 h-9 rounded-full border-2 border-gray-200 transition-all duration-200 hover:border-purple-300"
                 />
               ) : (
-                <div className="w-9 h-9 rounded-full bg-purple-100 flex items-center justify-center">
+                <div className="w-9 h-9 rounded-full bg-purple-100 flex items-center justify-center transition-all duration-200 hover:bg-purple-200 hover:scale-105">
                   <span className="text-purple-600 text-sm font-medium">
                     {session?.user?.name?.charAt(0)?.toUpperCase() || 'A'}
                   </span>

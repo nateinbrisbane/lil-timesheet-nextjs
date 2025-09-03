@@ -184,16 +184,16 @@ export default function Home() {
     <div className="min-h-screen bg-gray-50 p-4">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="bg-white rounded-lg shadow-sm mb-6">
+        <div className="bg-white rounded-lg shadow-sm mb-4">
           {/* Top Navigation Bar */}
           <div className="flex justify-between items-center p-4 border-b border-gray-100">
             <div className="flex items-center gap-6">
-              <h1 className="text-2xl font-bold text-gray-800">Lil Timesheet</h1>
+              <h1 className="text-2xl font-bold text-gray-800 cursor-default">Lil Timesheet</h1>
               {session.user?.role === 'ADMIN' && (
                 <nav className="flex items-center">
                   <button
                     onClick={() => router.push('/admin')}
-                    className="text-sm font-medium text-purple-600 hover:text-purple-700 underline decoration-2 underline-offset-4 transition-colors"
+                    className="text-sm font-medium text-purple-600 hover:text-purple-800 hover:bg-purple-50 px-3 py-1 rounded-md underline decoration-2 underline-offset-4 transition-all duration-200 ease-in-out transform hover:scale-105"
                   >
                     Admin Panel
                   </button>
@@ -203,18 +203,18 @@ export default function Home() {
             
             {/* User Profile & Logout */}
             <div className="flex items-center gap-4">
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-3 hover:bg-gray-50 px-3 py-2 rounded-lg transition-all duration-200 cursor-pointer">
                 {session.user?.image ? (
                   <Image
                     src={session.user.image}
                     alt={session.user?.name || 'User'}
                     width={36}
                     height={36}
-                    className="w-9 h-9 rounded-full border-2 border-gray-200"
+                    className="w-9 h-9 rounded-full border-2 border-gray-200 transition-all duration-200 hover:border-blue-300"
                   />
                 ) : (
-                  <div className="w-9 h-9 rounded-full bg-gray-300 flex items-center justify-center">
-                    <span className="text-gray-600 text-sm font-medium">
+                  <div className="w-9 h-9 rounded-full bg-gray-300 flex items-center justify-center transition-all duration-200 hover:bg-blue-100 hover:scale-105">
+                    <span className="text-gray-600 text-sm font-medium hover:text-blue-700">
                       {session.user?.name?.charAt(0)?.toUpperCase() || 'U'}
                     </span>
                   </div>
@@ -229,7 +229,7 @@ export default function Home() {
               <div className="h-6 w-px bg-gray-200"></div>
               <button
                 onClick={() => signOut({ callbackUrl: '/login' })}
-                className="text-sm font-medium text-gray-600 hover:text-red-600 transition-colors"
+                className="text-sm font-medium text-gray-600 hover:text-red-600 hover:bg-red-50 px-3 py-2 rounded-lg transition-all duration-200 ease-in-out transform hover:scale-105"
               >
                 Sign Out
               </button>
@@ -237,17 +237,17 @@ export default function Home() {
           </div>
           
           {/* Week Info */}
-          <div className="p-4">
+          <div className="px-4 py-2">
             <p className="text-gray-600">Week starting {format(currentWeek, 'dd/MM/yyyy')}</p>
           </div>
         </div>
 
         {/* Week Navigation */}
-        <div className="bg-white rounded-lg shadow-sm p-4 mb-6">
+        <div className="bg-white rounded-lg shadow-sm p-3 mb-4">
           <div className="flex justify-between items-center">
             <button
               onClick={() => navigateWeek('prev')}
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 hover:shadow-lg transition-all duration-200 ease-in-out transform hover:scale-105 active:scale-95"
             >
               ← Previous Week
             </button>
@@ -256,7 +256,7 @@ export default function Home() {
             </div>
             <button
               onClick={() => navigateWeek('next')}
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 hover:shadow-lg transition-all duration-200 ease-in-out transform hover:scale-105 active:scale-95"
             >
               Next Week →
             </button>
@@ -339,11 +339,11 @@ export default function Home() {
         </div>
 
         {/* Save Button */}
-        <div className="mt-6 flex justify-center">
+        <div className="mt-4 flex justify-center">
           <button
             onClick={saveTimesheet}
             disabled={loading}
-            className="px-8 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="px-8 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 hover:shadow-lg transition-all duration-200 ease-in-out transform hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:shadow-none"
           >
             {loading ? 'Saving...' : 'Save Timesheet'}
           </button>
