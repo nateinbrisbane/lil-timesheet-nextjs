@@ -365,14 +365,25 @@ function InvoicePageContent() {
             display: block !important;
           }
           
-          /* Hide navigation and page wrapper during print */
-          nav,
-          .bg-gray-50 {
+          /* Hide navigation during print */
+          nav {
             display: none !important;
           }
           
-          /* Ensure invoice content takes full width when printing */
-          .min-h-screen {
+          /* Hide the print button bar specifically */
+          .print\\:hidden {
+            display: none !important;
+          }
+          
+          /* Override layout styles for clean printing */
+          body {
+            margin: 0 !important;
+            padding: 0 !important;
+          }
+          
+          /* Ensure full width for invoice content */
+          .max-w-7xl {
+            max-width: none !important;
             margin: 0 !important;
             padding: 0 !important;
           }
