@@ -218,6 +218,8 @@ function InvoicePageContent() {
     return <div className="p-8">Loading invoice...</div>;
   }
 
+  console.log('Checking settings state:', { globalSettings: !!globalSettings, selectedTemplate: !!selectedTemplate, loading });
+  
   if (!globalSettings || !selectedTemplate) {
     return (
       <div className="p-8">
