@@ -204,21 +204,28 @@ export default function Home() {
             {/* User Profile & Logout */}
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-3 hover:bg-gray-50 px-3 py-2 rounded-lg transition-all duration-200 cursor-pointer">
-                {session.user?.image ? (
-                  <Image
-                    src={session.user.image}
-                    alt={session.user?.name || 'User'}
-                    width={36}
-                    height={36}
-                    className="w-9 h-9 rounded-full border-2 border-gray-200 transition-all duration-200 hover:border-blue-300"
-                  />
-                ) : (
-                  <div className="w-9 h-9 rounded-full bg-gray-300 flex items-center justify-center transition-all duration-200 hover:bg-blue-100 hover:scale-105">
-                    <span className="text-gray-600 text-sm font-medium hover:text-blue-700">
+                <div className="w-9 h-9 rounded-full bg-blue-100 flex items-center justify-center transition-all duration-200 hover:bg-blue-200 hover:scale-105 border-2 border-gray-200 hover:border-blue-300">
+                  {session.user?.image ? (
+                    <Image
+                      src={session.user.image}
+                      alt={session.user?.name || 'User'}
+                      width={36}
+                      height={36}
+                      className="w-9 h-9 rounded-full object-cover"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.style.display = 'none';
+                        const parent = target.parentElement;
+                        if (parent) {
+                          parent.innerHTML = `<span class="text-blue-700 text-sm font-medium">${session.user?.name?.charAt(0)?.toUpperCase() || 'U'}</span>`;
+                        }
+                      }}
+                    />
+                  ) : (
+                    <span className="text-blue-700 text-sm font-medium">
                       {session.user?.name?.charAt(0)?.toUpperCase() || 'U'}
                     </span>
-                  </div>
-                )}
+                  )}</div>
                 <div className="flex flex-col">
                   <span className="text-sm font-medium text-gray-900">{session.user?.name}</span>
                   {session.user?.role === 'ADMIN' && (
