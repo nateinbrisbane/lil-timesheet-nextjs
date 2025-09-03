@@ -1,60 +1,60 @@
 'use client';
 
 import { useSession } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
+import { useRouter, usePathname } from 'next/navigation';
 
 export default function SettingsPage() {
   const { data: session } = useSession();
   const router = useRouter();
-
-  useEffect(() => {
-    if (session) {
-      // Auto-redirect to invoice settings by default
-      router.push('/settings/invoice');
-    }
-  }, [session, router]);
+  const pathname = usePathname();
 
   if (!session) {
     return <div className="p-8">Please log in to access settings.</div>;
   }
 
+  const isActive = (path: string) => pathname === path;
+
+  const tabClass = (path: string) => 
+    `px-4 py-2 text-sm font-medium rounded-md transition-all duration-200 ease-in-out ${
+      isActive(path)
+        ? 'bg-blue-600 text-white'
+        : 'text-blue-600 hover:text-blue-800 hover:bg-blue-50'
+    }`;
+
   return (
-    <div className="bg-white rounded-lg shadow-sm p-8">
-      <h1 className="text-3xl font-bold text-gray-900 mb-6">Settings</h1>
-      
-      <div className="space-y-4">
-        <div className="border border-gray-200 rounded-lg p-6 hover:border-blue-300 transition-colors cursor-pointer">
-          <div onClick={() => router.push('/settings/invoice')}>
-            <h2 className="text-xl font-semibold text-gray-800 mb-2">Invoice Settings</h2>
-            <p className="text-gray-600">
-              Configure your contractor details, manage invoice templates, and set up client-specific billing rates.
-            </p>
+    <div className="bg-white rounded-lg shadow-sm">
+      <div className="p-8">
+        <h1 className="text-3xl font-bold text-gray-900 mb-6">Settings</h1>
+        
+        {/* Tab Navigation */}
+        <div className="mb-8">
+          <div className="flex gap-2 p-1 bg-gray-100 rounded-lg inline-flex">
+            <button
+              onClick={() => router.push('/settings/invoice')}
+              className={tabClass('/settings/invoice')}
+            >
+              Invoice Settings
+            </button>
+            
+            {session.user?.role === 'ADMIN' && (
+              <button
+                onClick={() => router.push('/settings/admin')}
+                className={tabClass('/settings/admin')}
+              >
+                Admin Settings
+              </button>
+            )}
           </div>
         </div>
 
-        {session.user?.role === 'ADMIN' && (
-          <div className="border border-gray-200 rounded-lg p-6 hover:border-purple-300 transition-colors cursor-pointer">
-            <div onClick={() => router.push('/settings/admin')}>
-              <h2 className="text-xl font-semibold text-gray-800 mb-2">Admin Settings</h2>
-              <p className="text-gray-600">
-                Manage users, control access permissions, and configure system-wide settings.
-              </p>
-            </div>
-          </div>
-        )}
-
-        <div className="border border-gray-200 rounded-lg p-6 opacity-50">
-          <h2 className="text-xl font-semibold text-gray-400 mb-2">Profile Settings</h2>
-          <p className="text-gray-400">
-            Coming soon - Manage your profile information and preferences.
+        {/* Content Area */}
+        <div className="text-center py-12">
+          <h2 className="text-xl font-semibold text-gray-800 mb-4">Welcome to Settings</h2>
+          <p className="text-gray-600 mb-6">
+            Use the tabs above to navigate to different settings sections.
           </p>
-        </div>
-
-        <div className="border border-gray-200 rounded-lg p-6 opacity-50">
-          <h2 className="text-xl font-semibold text-gray-400 mb-2">Notification Settings</h2>
-          <p className="text-gray-400">
-            Coming soon - Configure email notifications and reminders.
+          <p className="text-gray-500">
+            More settings sections will be added in future updates.
           </p>
         </div>
       </div>

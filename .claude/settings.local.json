@@ -22,7 +22,9 @@
       "Bash(npm run build:*)",
       "Bash(npx prisma:*)",
       "Bash(set DATABASE_URL=\"postgresql://neondb_owner:npg_AGcZsOr3hy4x@ep-rapid-lake-a7yutmff-pooler.ap-southeast-2.aws.neon.tech/neondb?sslmode=require\")",
-      "Bash(node:*)"
+      "Bash(node:*)",
+      "Bash(git checkout:*)",
+      "Bash(sed:*)"
     ],
     "deny": [],
     "ask": []

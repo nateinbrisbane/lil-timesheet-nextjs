@@ -274,7 +274,7 @@ export default function SettingsPage() {
                   value={globalSettings.addressLine1}
                   onChange={(e) => setGlobalSettings({...globalSettings, addressLine1: e.target.value})}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="e.g. Unit 5, 188 Gladstone Road"
+                  placeholder="e.g. Unit X, XXX Street Name"
                   required
                 />
               </div>
@@ -301,7 +301,7 @@ export default function SettingsPage() {
                   value={globalSettings.city}
                   onChange={(e) => setGlobalSettings({...globalSettings, city: e.target.value})}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="e.g. Highgate Hill Brisbane"
+                  placeholder="e.g. City Name"
                   required
                 />
               </div>
@@ -329,7 +329,7 @@ export default function SettingsPage() {
                   value={globalSettings.postcode}
                   onChange={(e) => setGlobalSettings({...globalSettings, postcode: e.target.value})}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="e.g. 4101"
+                  placeholder="e.g. XXXX"
                   required
                 />
               </div>

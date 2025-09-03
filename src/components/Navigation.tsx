@@ -11,20 +11,6 @@ export default function Navigation() {
 
   if (!session) return null;
 
-  const isActive = (path: string) => {
-    if (path === '/') {
-      return pathname === '/';
-    }
-    return pathname.startsWith(path);
-  };
-
-  const navLinkClass = (path: string) => 
-    `text-sm font-medium px-3 py-1 rounded-md underline decoration-2 underline-offset-4 transition-all duration-200 ease-in-out transform hover:scale-105 ${
-      isActive(path)
-        ? 'text-blue-700 bg-blue-50 border-blue-300'
-        : 'text-blue-600 hover:text-blue-800 hover:bg-blue-50'
-    }`;
-
   return (
     <div className="bg-white rounded-lg shadow-sm mb-3">
       <div className="flex justify-between items-center p-3 border-b border-gray-100">
@@ -35,35 +21,16 @@ export default function Navigation() {
           >
             Lil Timesheet
           </button>
-          
-          <nav className="flex items-center gap-4">
-            <button
-              onClick={() => router.push('/')}
-              className={navLinkClass('/')}
-            >
-              Timesheet
-            </button>
-            
-            <button
-              onClick={() => router.push('/settings')}
-              className={navLinkClass('/settings')}
-            >
-              Settings
-            </button>
-            
-            {session.user?.role === 'ADMIN' && (
-              <button
-                onClick={() => router.push('/settings/admin')}
-                className="text-sm font-medium text-purple-600 hover:text-purple-800 hover:bg-purple-50 px-3 py-1 rounded-md underline decoration-2 underline-offset-4 transition-all duration-200 ease-in-out transform hover:scale-105"
-              >
-                Admin Panel
-              </button>
-            )}
-          </nav>
         </div>
         
-        {/* User Profile & Logout */}
+        {/* Settings & User Profile & Logout */}
         <div className="flex items-center gap-4">
+          <button
+            onClick={() => router.push('/settings')}
+            className="text-sm font-medium text-blue-600 hover:text-blue-800 hover:bg-blue-50 px-3 py-1 rounded-md underline decoration-2 underline-offset-4 transition-all duration-200 ease-in-out transform hover:scale-105"
+          >
+            Settings
+          </button>
           <div className="flex items-center gap-3 hover:bg-gray-50 px-3 py-2 rounded-lg transition-all duration-200 cursor-pointer">
             <div className="w-9 h-9 rounded-full bg-blue-100 flex items-center justify-center transition-all duration-200 hover:bg-blue-200 hover:scale-105 border-2 border-gray-200 hover:border-blue-300">
               {session.user?.image ? (
