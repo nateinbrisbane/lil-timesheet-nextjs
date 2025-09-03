@@ -251,7 +251,7 @@ export default function SettingsPage() {
                   value={globalSettings.bankBsb}
                   onChange={(e) => setGlobalSettings({...globalSettings, bankBsb: e.target.value})}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="e.g. 064-496"
+                  placeholder="e.g. XXX-XXX"
                   required
                 />
               </div>
@@ -265,7 +265,7 @@ export default function SettingsPage() {
                   value={globalSettings.bankAccount}
                   onChange={(e) => setGlobalSettings({...globalSettings, bankAccount: e.target.value})}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="e.g. 1733 3825"
+                  placeholder="e.g. XXXXXXXX"
                   required
                 />
               </div>
@@ -279,7 +279,7 @@ export default function SettingsPage() {
                   value={globalSettings.addressLine1}
                   onChange={(e) => setGlobalSettings({...globalSettings, addressLine1: e.target.value})}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="e.g. Unit 5, 188 Gladstone Road"
+                  placeholder="e.g. Unit X, XXX Street Name"
                   required
                 />
               </div>
@@ -306,7 +306,7 @@ export default function SettingsPage() {
                   value={globalSettings.city}
                   onChange={(e) => setGlobalSettings({...globalSettings, city: e.target.value})}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="e.g. Highgate Hill Brisbane"
+                  placeholder="e.g. City Name"
                   required
                 />
               </div>
@@ -320,7 +320,7 @@ export default function SettingsPage() {
                   value={globalSettings.state}
                   onChange={(e) => setGlobalSettings({...globalSettings, state: e.target.value})}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="e.g. QLD"
+                  placeholder="e.g. State/Province"
                   required
                 />
               </div>
@@ -334,7 +334,7 @@ export default function SettingsPage() {
                   value={globalSettings.postcode}
                   onChange={(e) => setGlobalSettings({...globalSettings, postcode: e.target.value})}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="e.g. 4101"
+                  placeholder="e.g. XXXX"
                   required
                 />
               </div>
