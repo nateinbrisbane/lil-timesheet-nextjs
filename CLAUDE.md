@@ -1,7 +1,7 @@
 # Lil Timesheet - Claude Code Documentation
 
 ## Project Overview
-Lil Timesheet is a weekly timesheet tracking application built with Next.js 15, featuring multi-user support with Google OAuth authentication and admin controls.
+Lil Timesheet is a weekly timesheet tracking application built with Next.js 15, featuring multi-user support with Google OAuth authentication, admin controls, and comprehensive invoice generation capabilities.
 
 ## Features
 - **Weekly Timesheet View**: Monday-Sunday layout with dd/MM/yyyy date format
@@ -11,6 +11,8 @@ Lil Timesheet is a weekly timesheet tracking application built with Next.js 15, 
 - **Week Navigation**: Previous/next buttons for week browsing
 - **Multi-User Support**: Google OAuth authentication with data isolation
 - **Admin Dashboard**: User management with role/status controls
+- **Invoice System**: Database-driven invoice generation with templates
+- **Client-Specific Templates**: Multiple invoice templates with custom rates
 - **Professional UI**: Hover effects, compact spacing, responsive design
 
 ## Tech Stack
@@ -27,35 +29,101 @@ Lil Timesheet is a weekly timesheet tracking application built with Next.js 15, 
 
 ## Database Schema
 ```prisma
+enum UserRole {
+  USER
+  ADMIN
+}
+
+enum UserStatus {
+  ACTIVE
+  INACTIVE
+  PENDING
+}
+
 model User {
-  id          String      @id @default(cuid())
-  email       String      @unique
-  name        String?
-  image       String?
-  role        UserRole    @default(USER)
-  status      UserStatus  @default(PENDING)
-  timesheets  Timesheet[]
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
+  id                    String                 @id @default(cuid())
+  name                  String?
+  email                 String                 @unique
+  emailVerified         DateTime?
+  image                 String?
+  role                  UserRole               @default(USER)
+  status                UserStatus             @default(PENDING)
+  accounts              Account[]
+  sessions              Session[]
+  timesheets            Timesheet[]
+  globalInvoiceSettings GlobalInvoiceSettings?
+  invoiceTemplates      InvoiceTemplate[]
+  createdAt             DateTime               @default(now())
+  updatedAt             DateTime               @updatedAt @default(now())
+  lastLoginAt           DateTime?
 }
 
 model Timesheet {
-  id       String     @id @default(cuid())
-  userId   String
-  weekStart DateTime
-  user     User       @relation(fields: [userId], references: [id], onDelete: Cascade)
-  days     DayEntry[]
+  id          String     @id @default(cuid())
+  userId      String
+  weekStart   DateTime
+  weeklyTotal String?
+  user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  dayEntries  DayEntry[]
+  
+  @@unique([userId, weekStart])
 }
 
 model DayEntry {
   id           String    @id @default(cuid())
   timesheetId  String
-  date         DateTime
+  dayName      String
+  date         String
   startTime    String?
-  breakHours   Int?
-  breakMinutes Int?
+  breakHours   Int       @default(0)
+  breakMinutes Int       @default(0)
   finishTime   String?
+  totalHours   String?
   timesheet    Timesheet @relation(fields: [timesheetId], references: [id], onDelete: Cascade)
+  
+  @@unique([timesheetId, dayName])
+}
+
+model GlobalInvoiceSettings {
+  id              String   @id @default(cuid())
+  userId          String   @unique
+  contractorName  String
+  abn             String
+  bankBsb         String
+  bankAccount     String
+  addressLine1    String
+  addressLine2    String?
+  city            String
+  state           String
+  postcode        String
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model InvoiceTemplate {
+  id              String   @id @default(cuid())
+  userId          String
+  templateName    String
+  clientName      String
+  dayRate         Float
+  gstPercentage   Float    @default(0.10)
+  
+  // Optional overrides for global settings
+  customContractorName  String?
+  customAbn            String?
+  customBankBsb        String?
+  customBankAccount    String?
+  customAddress        String?
+  
+  isDefault       Boolean  @default(false)
+  isActive        Boolean  @default(true)
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@unique([userId, templateName])
 }
 ```
 
@@ -74,6 +142,7 @@ DATABASE_URL=your_postgresql_connection_string
 - `npm run lint` - Run ESLint
 - `npx prisma generate` - Generate Prisma client
 - `npx prisma migrate dev` - Run database migrations
+- `npx prisma db push` - Sync schema to production database
 - `npx prisma studio` - Open Prisma Studio
 
 ## Deployment
@@ -86,14 +155,24 @@ DATABASE_URL=your_postgresql_connection_string
 ```
 src/
 ├── app/
-│   ├── admin/page.tsx          # Admin dashboard
 │   ├── api/
 │   │   ├── auth/[...nextauth]/ # NextAuth configuration
 │   │   ├── admin/users/        # Admin user management API
+│   │   ├── invoice/            # Invoice API endpoints
+│   │   │   ├── settings/       # Global invoice settings
+│   │   │   └── templates/      # Invoice templates CRUD
 │   │   └── timesheet/          # Timesheet CRUD API
+│   ├── invoice/
+│   │   └── page.tsx            # Invoice generation page
+│   ├── settings/
+│   │   ├── admin/page.tsx      # Admin user management
+│   │   ├── invoice/page.tsx    # Invoice settings management
+│   │   └── page.tsx            # Settings hub with tabs
 │   ├── globals.css             # Global styles
-│   ├── layout.tsx              # Root layout with providers
+│   ├── layout.tsx              # Root layout with global navigation
 │   └── page.tsx                # Main timesheet interface
+├── components/
+│   └── Navigation.tsx          # Shared navigation component
 ├── lib/
 │   └── auth.ts                 # Auth configuration
 └── prisma/
@@ -112,19 +191,32 @@ src/
 - All timesheet data is scoped to the authenticated user
 - Database queries include user ID filtering
 - Admin can only manage users, not view their timesheet data
+- Invoice settings and templates are user-specific
+
+### Invoice System
+- **Global Settings**: Store contractor details (name, ABN, bank details, address)
+- **Invoice Templates**: Client-specific templates with custom rates and optional overrides
+- **Template Flexibility**: Global settings can be overridden per template for different clients
+- **Database-Driven**: All invoice data retrieved from database, no hardcoded values
+- **Privacy-First**: No personal information stored in code or placeholders
 
 ### UI/UX Highlights
-- Professional hover effects on navigation and buttons
-- Compact spacing to fit save button without scrolling
-- Avatar fallback system with user initials
-- Responsive design for mobile and desktop
-- Clean table styling with subtle borders
+- **Navigation**: Unified navigation component with clickable title and right-aligned Settings
+- **Settings Organization**: Tabbed settings interface (Invoice Settings, Admin Settings)
+- **Professional Effects**: Hover animations on navigation and interactive elements
+- **Compact Layout**: Optimized spacing to fit content without scrolling
+- **Avatar System**: Robust fallback system with user initials for profile images
+- **Responsive Design**: Mobile and desktop optimized layouts
+- **Clean Styling**: Subtle borders, proper spacing, and consistent color scheme
 
 ## Development History
 - Initially built with Express.js and SQLite
 - Migrated to Next.js for better Vercel compatibility
 - Added multi-user functionality and admin controls
 - Enhanced UI with professional styling and hover effects
+- Implemented comprehensive invoice system with database-driven templates
+- Reorganized navigation and settings structure for better UX
+- Removed all personal information from codebase for privacy
 - Cleaned up legacy Express.js files for final deployment
 
 ## Support

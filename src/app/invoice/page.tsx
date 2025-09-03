@@ -139,8 +139,8 @@ function InvoicePageContent() {
   };
 
   const getDaysWorked = (): number => {
-    if (!timesheetData) return 0;
-    return timesheetData.days.filter(day => calculateHours(day) > 0).length;
+    const totalHours = getTotalHours();
+    return totalHours / 8; // 8 hours = 1 day
   };
 
   const getWeekEndingDate = (): string => {
@@ -171,9 +171,10 @@ function InvoicePageContent() {
     };
   };
 
-  const subtotalBeforeGST = getDaysWorked() * getDayRate();
+  const daysWorked = getDaysWorked();
+  const subtotalBeforeGST = daysWorked * getDayRate();
   const gstAmount = subtotalBeforeGST * getGstPercentage();
-  const totalIncludingGST = subtotalBeforeGST + gstAmount;
+  const totalIncludingGST = subtotalBeforeGST * 1.1;
 
   if (!session) {
     return <div className="p-8">Please log in to view invoices.</div>;
@@ -289,7 +290,7 @@ function InvoicePageContent() {
             <tbody>
               <tr>
                 <td className="border border-gray-400 px-4 py-3">{getWeekEndingDate()}</td>
-                <td className="border border-gray-400 px-4 py-3">{getDaysWorked()}</td>
+                <td className="border border-gray-400 px-4 py-3">{daysWorked.toFixed(1)}</td>
                 <td className="border border-gray-400 px-4 py-3">${getDayRate().toLocaleString('en-AU', { minimumFractionDigits: 2 })}</td>
                 <td className="border border-gray-400 px-4 py-3">${subtotalBeforeGST.toLocaleString('en-AU', { minimumFractionDigits: 2 })}</td>
                 <td className="border border-gray-400 px-4 py-3">${gstAmount.toLocaleString('en-AU', { minimumFractionDigits: 2 })}</td>
@@ -297,7 +298,7 @@ function InvoicePageContent() {
               </tr>
               <tr className="bg-orange-50 font-medium">
                 <td className="border border-gray-400 px-4 py-3">Total</td>
-                <td className="border border-gray-400 px-4 py-3">{getDaysWorked()}</td>
+                <td className="border border-gray-400 px-4 py-3">{daysWorked.toFixed(1)}</td>
                 <td className="border border-gray-400 px-4 py-3">-</td>
                 <td className="border border-gray-400 px-4 py-3">${subtotalBeforeGST.toLocaleString('en-AU', { minimumFractionDigits: 2 })}</td>
                 <td className="border border-gray-400 px-4 py-3">${gstAmount.toLocaleString('en-AU', { minimumFractionDigits: 2 })}</td>
