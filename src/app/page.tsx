@@ -35,6 +35,45 @@ export default function Home() {
   })
   const [loading, setLoading] = useState(false)
 
+  const timeToMinutes = useCallback((time: string): number => {
+    const [hours, minutes] = time.split(':').map(Number)
+    return hours * 60 + minutes
+  }, [])
+
+  const minutesToTime = useCallback((minutes: number): string => {
+    const hours = Math.floor(minutes / 60)
+    const mins = minutes % 60
+    return `${hours}:${mins.toString().padStart(2, '0')}`
+  }, [])
+
+  const calculateTotals = useCallback((data: WeekData) => {
+    let totalMinutes = 0
+
+    const updatedData = { ...data }
+    
+    dayNames.forEach(day => {
+      const dayData = updatedData.data[day]
+      if (dayData.start && dayData.finish) {
+        const startMinutes = timeToMinutes(dayData.start)
+        const finishMinutes = timeToMinutes(dayData.finish)
+        const breakMinutes = parseInt(dayData.breakHours || '0') * 60 + parseInt(dayData.breakMinutes || '0')
+        
+        const dailyMinutes = finishMinutes - startMinutes - breakMinutes
+        if (dailyMinutes > 0) {
+          totalMinutes += dailyMinutes
+          dayData.total = minutesToTime(dailyMinutes)
+        } else {
+          dayData.total = '0:00'
+        }
+      } else {
+        dayData.total = '0:00'
+      }
+    })
+
+    updatedData.weeklyTotal = minutesToTime(totalMinutes)
+    setWeekData(updatedData)
+  }, [timeToMinutes, minutesToTime])
+
   const initializeWeek = useCallback(() => {
     const weekStart = format(currentWeek, 'yyyy-MM-dd')
     const newData: Record<string, DayData> = {}
@@ -61,7 +100,7 @@ export default function Home() {
 
     setWeekData(newWeekData)
     calculateTotals(newWeekData)
-  }, [currentWeek])
+  }, [currentWeek, calculateTotals])
 
   useEffect(() => {
     if (status === 'loading') return
@@ -73,44 +112,6 @@ export default function Home() {
     initializeWeek()
   }, [status, router, initializeWeek])
 
-  const calculateTotals = (data: WeekData) => {
-    let totalMinutes = 0
-
-    const updatedData = { ...data }
-    
-    dayNames.forEach(day => {
-      const dayData = updatedData.data[day]
-      if (dayData.start && dayData.finish) {
-        const startMinutes = timeToMinutes(dayData.start)
-        const finishMinutes = timeToMinutes(dayData.finish)
-        const breakMinutes = parseInt(dayData.breakHours || '0') * 60 + parseInt(dayData.breakMinutes || '0')
-        
-        const dailyMinutes = finishMinutes - startMinutes - breakMinutes
-        if (dailyMinutes > 0) {
-          totalMinutes += dailyMinutes
-          dayData.total = minutesToTime(dailyMinutes)
-        } else {
-          dayData.total = '0:00'
-        }
-      } else {
-        dayData.total = '0:00'
-      }
-    })
-
-    updatedData.weeklyTotal = minutesToTime(totalMinutes)
-    setWeekData(updatedData)
-  }
-
-  const timeToMinutes = (time: string): number => {
-    const [hours, minutes] = time.split(':').map(Number)
-    return hours * 60 + minutes
-  }
-
-  const minutesToTime = (minutes: number): string => {
-    const hours = Math.floor(minutes / 60)
-    const mins = minutes % 60
-    return `${hours}:${mins.toString().padStart(2, '0')}`
-  }
 
   const handleInputChange = (day: string, field: keyof DayData, value: string) => {
     const newWeekData = {
