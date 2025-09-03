@@ -15,9 +15,16 @@ interface DayEntry {
 }
 
 interface TimesheetData {
-  id: string;
   weekStart: string;
-  days: DayEntry[];
+  weeklyTotal: string;
+  data: Record<string, {
+    date: string;
+    start: string | null;
+    breakHours: string;
+    breakMinutes: string;
+    finish: string | null;
+    total: string;
+  }>;
 }
 
 interface GlobalInvoiceSettings {
@@ -109,8 +116,10 @@ function InvoicePageContent() {
     try {
       const response = await fetch(`/api/timesheet?weekStart=${weekStart}`);
       if (response.ok) {
-        const data = await response.json();
-        setTimesheetData(data);
+        const result = await response.json();
+        if (result.success) {
+          setTimesheetData(result.data);
+        }
       }
     } catch (error) {
       console.error('Error fetching timesheet:', error);
@@ -119,15 +128,20 @@ function InvoicePageContent() {
     }
   };
 
-  const calculateHours = (day: DayEntry): number => {
-    if (!day.startTime || !day.finishTime) return 0;
+  const calculateHours = (dayData: {
+    start: string | null;
+    finish: string | null;
+    breakHours: string;
+    breakMinutes: string;
+  }): number => {
+    if (!dayData.start || !dayData.finish) return 0;
 
-    const [startHour, startMin] = day.startTime.split(':').map(Number);
-    const [finishHour, finishMin] = day.finishTime.split(':').map(Number);
+    const [startHour, startMin] = dayData.start.split(':').map(Number);
+    const [finishHour, finishMin] = dayData.finish.split(':').map(Number);
     
     const startMinutes = startHour * 60 + startMin;
     const finishMinutes = finishHour * 60 + finishMin;
-    const breakMinutes = (day.breakHours || 0) * 60 + (day.breakMinutes || 0);
+    const breakMinutes = parseInt(dayData.breakHours || '0') * 60 + parseInt(dayData.breakMinutes || '0');
     
     const totalMinutes = finishMinutes - startMinutes - breakMinutes;
     return Math.max(0, totalMinutes / 60);
@@ -135,7 +149,7 @@ function InvoicePageContent() {
 
   const getTotalHours = (): number => {
     if (!timesheetData) return 0;
-    return timesheetData.days.reduce((total, day) => total + calculateHours(day), 0);
+    return Object.values(timesheetData.data).reduce((total, dayData) => total + calculateHours(dayData), 0);
   };
 
   const getDaysWorked = (): number => {
