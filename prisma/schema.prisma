@@ -56,6 +56,8 @@ model User {
   accounts      Account[]
   sessions      Session[]
   timesheets    Timesheet[]
+  globalInvoiceSettings GlobalInvoiceSettings?
+  invoiceTemplates      InvoiceTemplate[]
   createdAt     DateTime   @default(now())
   updatedAt     DateTime   @updatedAt @default(now())
   lastLoginAt   DateTime?
@@ -97,4 +99,51 @@ model DayEntry {
   timesheet    Timesheet @relation(fields: [timesheetId], references: [id], onDelete: Cascade)
   
   @@unique([timesheetId, dayName])
+}
+
+// Global invoice settings - your contractor details
+model GlobalInvoiceSettings {
+  id              String   @id @default(cuid())
+  userId          String   @unique
+  contractorName  String
+  abn             String
+  bankBsb         String
+  bankAccount     String
+  addressLine1    String
+  addressLine2    String?
+  city            String
+  state           String
+  postcode        String
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  user            User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// Client-specific invoice templates with custom rates
+model InvoiceTemplate {
+  id              String   @id @default(cuid())
+  userId          String
+  templateName    String   // e.g. "Client A - Development", "Client B - Consulting"
+  clientName      String
+  dayRate         Float
+  gstPercentage   Float    @default(0.10)
+  
+  // Optional: Override global settings per template
+  customContractorName  String?
+  customAbn            String?
+  customBankBsb        String?
+  customBankAccount    String?
+  customAddress        String? // Full address override
+  
+  // Template settings
+  isDefault       Boolean  @default(false)
+  isActive        Boolean  @default(true)
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  user            User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@unique([userId, templateName])
 }

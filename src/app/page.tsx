@@ -189,16 +189,22 @@ export default function Home() {
           <div className="flex justify-between items-center p-3 border-b border-gray-100">
             <div className="flex items-center gap-6">
               <h1 className="text-2xl font-bold text-gray-800 cursor-default">Lil Timesheet</h1>
-              {session.user?.role === 'ADMIN' && (
-                <nav className="flex items-center">
+              <nav className="flex items-center gap-4">
+                <button
+                  onClick={() => router.push('/settings')}
+                  className="text-sm font-medium text-blue-600 hover:text-blue-800 hover:bg-blue-50 px-3 py-1 rounded-md underline decoration-2 underline-offset-4 transition-all duration-200 ease-in-out transform hover:scale-105"
+                >
+                  Invoice Settings
+                </button>
+                {session.user?.role === 'ADMIN' && (
                   <button
                     onClick={() => router.push('/admin')}
                     className="text-sm font-medium text-purple-600 hover:text-purple-800 hover:bg-purple-50 px-3 py-1 rounded-md underline decoration-2 underline-offset-4 transition-all duration-200 ease-in-out transform hover:scale-105"
                   >
                     Admin Panel
                   </button>
-                </nav>
-              )}
+                )}
+              </nav>
             </div>
             
             {/* User Profile & Logout */}
@@ -345,14 +351,22 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Save Button */}
-        <div className="mt-3 flex justify-center">
+        {/* Action Buttons */}
+        <div className="mt-3 flex justify-center gap-4">
           <button
             onClick={saveTimesheet}
             disabled={loading}
             className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 hover:shadow-lg transition-all duration-200 ease-in-out transform hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:shadow-none"
           >
             {loading ? 'Saving...' : 'Save Timesheet'}
+          </button>
+          
+          <button
+            onClick={() => router.push(`/invoice?weekStart=${weekData.weekStart}`)}
+            disabled={!weekData.weekStart}
+            className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 hover:shadow-lg transition-all duration-200 ease-in-out transform hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:shadow-none"
+          >
+            Generate Invoice
           </button>
         </div>
       </div>
