@@ -23,16 +23,14 @@ export default function Navigation() {
           </button>
         </div>
         
-        {/* Settings & User Profile & Logout */}
+        {/* User Profile & Logout */}
         <div className="flex items-center gap-4">
+          {/* User Profile - Clickable to Settings */}
           <button
             onClick={() => router.push('/settings')}
-            className="text-sm font-medium text-blue-600 hover:text-blue-800 hover:bg-blue-50 px-3 py-1 rounded-md underline decoration-2 underline-offset-4 transition-all duration-200 ease-in-out transform hover:scale-105"
+            className="flex items-center gap-3 hover:bg-gray-50 px-3 py-2 rounded-lg transition-all duration-200 cursor-pointer group"
           >
-            Settings
-          </button>
-          <div className="flex items-center gap-3 hover:bg-gray-50 px-3 py-2 rounded-lg transition-all duration-200 cursor-pointer">
-            <div className="w-9 h-9 rounded-full bg-blue-100 flex items-center justify-center transition-all duration-200 hover:bg-blue-200 hover:scale-105 border-2 border-gray-200 hover:border-blue-300">
+            <div className="w-9 h-9 rounded-full bg-blue-100 flex items-center justify-center transition-all duration-200 group-hover:bg-blue-200 group-hover:scale-105 border-2 border-gray-200 group-hover:border-blue-300">
               {session.user?.image ? (
                 <Image
                   src={session.user.image}
@@ -56,18 +54,23 @@ export default function Navigation() {
               )}
             </div>
             <div className="flex flex-col">
-              <span className="text-sm font-medium text-gray-900 leading-tight">
+              <span className="text-sm font-medium text-gray-900 leading-tight group-hover:text-blue-700 transition-colors">
                 {session.user?.name || 'User'}
               </span>
-              <span className="text-xs text-gray-500 leading-tight">
-                {session.user?.email}
+              <span className="text-xs text-gray-500 leading-tight group-hover:text-blue-600 transition-colors">
+                Settings & Account
               </span>
             </div>
-          </div>
+            <div className="text-gray-400 group-hover:text-blue-500 transition-colors">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </div>
+          </button>
           
           <button
             onClick={() => signOut()}
-            className="text-sm font-medium text-red-600 hover:text-red-800 hover:bg-red-50 px-3 py-2 rounded-md underline decoration-2 underline-offset-4 transition-all duration-200 ease-in-out transform hover:scale-105"
+            className="text-sm font-medium text-gray-600 hover:text-red-600 hover:bg-red-50 px-3 py-2 rounded-md transition-all duration-200 ease-in-out"
           >
             Sign out
           </button>
