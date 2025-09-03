@@ -31,7 +31,7 @@ export default function Navigation() {
           {/* User Profile - Clickable to Settings */}
           <button
             onClick={() => router.push('/settings')}
-            className="flex items-center gap-3 hover:bg-gray-50 px-3 py-2 rounded-lg transition-all duration-200 cursor-pointer group"
+            className="flex items-center gap-3 bg-gray-50 hover:bg-gray-100 px-3 py-2 rounded-lg transition-all duration-200 cursor-pointer group border border-gray-200 hover:border-blue-300"
           >
             <div className="w-9 h-9 rounded-full bg-blue-100 flex items-center justify-center transition-all duration-200 group-hover:bg-blue-200 group-hover:scale-105 border-2 border-gray-200 group-hover:border-blue-300">
               {session.user?.image ? (
@@ -74,7 +74,7 @@ export default function Navigation() {
           
           <button
             onClick={() => signOut()}
-            className="flex items-center gap-2 text-sm font-medium text-gray-600 hover:text-red-600 hover:bg-red-50 px-3 py-2 rounded-md transition-all duration-200 ease-in-out"
+            className="flex items-center gap-2 text-sm font-medium text-gray-600 hover:text-red-600 bg-gray-50 hover:bg-red-50 px-3 py-2 rounded-md transition-all duration-200 ease-in-out border border-gray-200 hover:border-red-300"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
