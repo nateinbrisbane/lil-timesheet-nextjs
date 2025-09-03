@@ -172,9 +172,12 @@ function InvoicePageContent() {
   };
 
   const daysWorked = getDaysWorked();
-  const subtotalBeforeGST = daysWorked * getDayRate();
-  const gstAmount = subtotalBeforeGST * getGstPercentage();
-  const totalIncludingGST = subtotalBeforeGST * 1.1;
+  const dayRate = getDayRate();
+  const gstPercentage = getGstPercentage();
+  
+  const subtotalBeforeGST = daysWorked * dayRate;
+  const gstAmount = subtotalBeforeGST * gstPercentage;
+  const totalIncludingGST = subtotalBeforeGST * (1 + gstPercentage);
 
   if (!session) {
     return <div className="p-8">Please log in to view invoices.</div>;
