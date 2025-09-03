@@ -141,7 +141,7 @@ export async function GET(request: NextRequest) {
         breakHours: entry.breakHours.toString(),
         breakMinutes: entry.breakMinutes.toString(),
         finish: entry.finishTime,
-        total: entry.totalHours
+        total: entry.totalHours || '0:00'
       }
     })
 
@@ -149,7 +149,7 @@ export async function GET(request: NextRequest) {
       success: true,
       data: {
         weekStart: timesheet.weekStart.toISOString().split('T')[0],
-        weeklyTotal: timesheet.weeklyTotal,
+        weeklyTotal: timesheet.weeklyTotal || '0:00',
         data
       }
     })
