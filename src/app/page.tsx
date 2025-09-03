@@ -181,8 +181,8 @@ export default function Home() {
   if (!session) return null
 
   return (
-    <div className="min-h-screen bg-gray-50 p-3">
-      <div className="max-w-7xl mx-auto">
+    <div className="bg-white rounded-lg shadow-sm">
+      <div className="p-3">
         {/* Header */}
         <div className="bg-white rounded-lg shadow-sm mb-3">
           {/* Top Navigation Bar */}
